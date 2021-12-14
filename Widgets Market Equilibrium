@@ -1,0 +1,33 @@
+#Equations
+#QD = 8,000 - 40P + 0.15M - 20PR
+#QS = 200P + 10,600
+
+#Create Vector for P
+P = seq(0,100)
+P
+
+#Create Object for Income
+M = 69600
+
+#Create object for Price of a Related Good
+PR = 32
+
+#Create a Vector for Demand
+Demand = 8000 - 40*P + 0.15*M - 20*PR
+
+#Create a Vector for Supply 
+Supply = 200*P + 10600
+
+#Create a Data Frame for Price, Demand, and Supply
+WidgetSD = data.frame("Price" = P, Demand,Supply)
+head(WidgetSD)
+
+#Plot a Supply and Demand Curve
+plot(y=WidgetSD$Price, WidgetSD$Demand, col = "red", type = "l", main = "Widget Supply and Demand", 
+     xlab = "Quantity", ylab = "Price")
+points(y=WidgetSD$Price,WidgetSD$Supply, col = "blue", type = "l")
+
+#Find the Market Equilibirum
+eqfilter = WidgetSD$Demand==WidgetSD$Supply
+WidgetSD[eqfilter,]
+
