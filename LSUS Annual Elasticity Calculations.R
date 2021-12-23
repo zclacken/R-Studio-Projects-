@@ -130,3 +130,10 @@ colnames(LSUSelasticity) = c("Year","Enrollment","Credit Hours",
                              "Credit Hour Elasticity")
 head(LSUSelasticity)
 
+  Year Enrollment Credit Hours Tuition & Fees Enrollment Elasticity Credit Hour Elasticity
+1 2000       3422        90624           1025                   NaN                    NaN
+2 2001       3419        94446           1150          -0.007188778             0.34582892
+3 2002       3543        96039           1184           1.226708876             0.57049406
+4 2003       3655       101352           1442           0.145070419             0.25387748
+5 2004       3910       101868           1545           0.976744186             0.07127634
+6 2005       3940       100181           1621           0.155976578            -0.33666052
