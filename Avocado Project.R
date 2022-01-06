@@ -197,11 +197,11 @@ write.csv(AvocadosSeasons,"C:\\Users\\zara\\Documents\\
 #-----------------------------------------------------Regional and Seasonal Plot 
 
 #Create a function to plot demand per region according to season 
-RegionSeasonplot <- function(season){
+RegionSeasonplot <- function(season, title){
   plot(AvocadosSeasons[AvocadosSeasons$Season == season,]$Units.Current.Year/1e+07, 
        AvocadosSeasons[AvocadosSeasons$Season == season,]$ASP.Current.Year,
        xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
-       main = "2021 U.S.A. Hass Avocado Regional Demand", 
+       main = title, 
        col = factor(AvocadosSeasons$Geography), 
        yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.1) 
   axis(2,seq(0.75,1.35,0.10))
@@ -210,7 +210,10 @@ RegionSeasonplot <- function(season){
 }
 
 #Create Regional Plot For Each Season Using Function 
-RegionSeasonplot(Summer)
+RegionSeasonplot(Winter,"2021 U.S.A Hass Avocado Regional Demand (Winter)")
+RegionSeasonplot(Spring,"2021 U.S.A Hass Avocado Regional Demand (Spring)")
+RegionSeasonplot(Summer,"2021 U.S.A Hass Avocado Regional Demand (Summer)")
+RegionSeasonplot(Fall,"2021 U.S.A Hass Avocado Regional Demand (Fall)")
 
 
 
