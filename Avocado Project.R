@@ -210,7 +210,7 @@ RegionSeasonplot(Summer,"2021 U.S.A Hass Avocado Regional Demand (Summer)")
 RegionSeasonplot(Fall,"2021 U.S.A Hass Avocado Regional Demand (Fall)")
 
 
-#-----------------------------------------------------Total Sales by Region Plot
+#-----------------------------------------------Total Sales by Region Data Frame
 
 #Create a vector containing the annual total for each region 
 regioncount = as.vector(seq(1,8))
@@ -224,23 +224,25 @@ regiontotals
 
 #Create a table for region totals and region; sorted from highest to lowest sales 
 AvocadosTotalRegionSales <- data.frame("Region" = Regions,"Total Sales" = regiontotals)
-AvocadosTotalRegionSales <- AvocadosTotalRegionSales[order(AvocadosTotalRegionSales$Total.Sales,decreasing = FALSE),]
+totals_in_order = order(AvocadosTotalRegionSales$Total.Sales, decreasing = TRUE)
+AvocadosTotalRegionSales <- AvocadosTotalRegionSales[totals_in_order,]   
 head(AvocadosTotalRegionSales)
 
-#Create a bar chart for total region sales
-?barplot
-unique(AvocadosTotalRegionSales$Region) 
+#-------------------------------------------------Total Sales by Region Bar Plot 
 
 #Adjust the size and margins of the plot
-par(mar = c(5, 7, 4, 8) + 0.1)  
-barplot(height = AvocadosTotalRegionSales$Total.Sales/1e+06, 
-        xlab = "Units Sold (Millions)", 
+par(mar = c(6, 7, 4, 8) + 0.1) 
+#create plot 
+plt <- barplot(height = AvocadosTotalRegionSales$Total.Sales/1e+06, 
+        ylab = "Units Sold (Millions)", 
         main = "2021 Total Avocado Sales (Regional)", 
-        xaxt = "none", col = factor(AvocadosTotalRegionSales$Region),
-        space = 0.5,names.arg = unique(AvocadosTotalRegionSales$Region),
-        cex.names = 1, las = 1, horiz = TRUE)
-axis(1,seq(0,400,100))
-
+        yaxt = "none", xaxt = "none", col = factor(AvocadosTotalRegionSales$Region),
+        space = 0.2)
+#format y-axis
+axis(2,seq(0,400,100))
+#Create x-axis labels that are diagonally rotated 
+text(plt, par("usr")[3]-4, srt = 60, adj = 1, xpd = TRUE,
+     labels = factor(AvocadosTotalRegionSales$Region), cex = 1, offset = 2)
 
 #---------------------------------------------------Total Avocado Sales Seasonal
 
