@@ -246,5 +246,35 @@ text(plt, par("usr")[3]-4, srt = 60, adj = 1, xpd = TRUE,
 
 #---------------------------------------------------Total Avocado Sales Seasonal
 
+#Create Seasonal Sales Total Data Frame
+WSSF = c("Winter", "Spring", "Summer", "Fall")
+seasonaltotals = c()
+for (s in seq(1,4)) {
+  sums2 = sum(AvocadosSeasons[AvocadosSeasons$Season == WSSF[s],"Units.Current.Year"])
+  seasonaltotals = c(seasonaltotals,sums2)
+}
+seasonaltotals
+
+AvocadosTotalSeasonSales <- data.frame("Season" = WSSF,"Total Sales" = seasonaltotals)
+totals_in_order2 = order(AvocadosTotalSeasonSales$Total.Sales, decreasing = TRUE)
+AvocadosTotalSeasonSales <- AvocadosTotalSeasonSales[totals_in_order2,]   
+head(AvocadosTotalSeasonSales)
+
+#--------------------------------------------------Total Seasonal Sales Bar Plot
+
+#Adjust the size and margins of the plot
+par(mar = c(6, 7, 4, 8) + 0.1) 
+#create plot 
+plt2 <- barplot(height = AvocadosTotalSeasonSales$Total.Sales/1e+06, 
+               ylab = "Units Sold (Millions)", 
+               main = "2021 Total Avocado Sales (Seasonal)", 
+               yaxt = "none", xaxt = "none", col = factor(AvocadosTotalSeasonSales$Season),
+               space = 0.2)
+#format y-axis
+axis(2,seq(0,500,100))
+#Create x-axis labels that are diagonally rotated 
+text(plt2, par("usr")[3]-6, srt = 60, adj = 1, xpd = TRUE,
+     labels = factor(AvocadosTotalSeasonSales$Season), cex = 1, offset = 2)
+
 
 
