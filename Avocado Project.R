@@ -137,7 +137,7 @@ lines(y= Pvector,x = Qvector/1e+08,type = "l", col = "Blue", lwd = 2, lty = 1)
 #Add regression equation to plot
 text(x=1.79, y=1.10, "P = 2.46378 - 8.021717e-09Q ",col="Black", font=c(2,3), cex=0.8)
 
-#-----------------------------------------------------------Regional Demand Plot
+#------------------------------------------------Regional Demand Plot 
 plot(AvocadosRegional$Units.Current.Year/1e+07, AvocadosRegional$ASP.Current.Year,
      xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
      main = "2021 U.S.A. Hass Avocado Demand (Regional)", 
@@ -147,24 +147,70 @@ axis(2,seq(0.5,1.5,0.25))
 legend("topright", legend = levels(factor(AvocadosRegional$Geography)), 
        fill = as.numeric(unique(factor(AvocadosRegional$Geography)))) 
 
-#-------------------------------------------------------------Seasonal Demand Plot 
+#----------------------------------------------------------Seasonal  Demand Plot 
 
-#Create a table for seasons 
-AvocadosSeason = AvocadosRaw[,]
+#Create Seasons Vectors
 
+#Create a periods vector
+Periods = seq(1,11)
 
+#What are the unique dates corresponding to each season?  
+unique(AvocadosSeasons$Current.Year.Week.Ending)
 
+#Winter = Periods 1,2
+#Spring = Periods 3,4,5
+#Summer = Periods 6,7,8
+#Fall = Periods 9,10,11 
 
+#There are 8 regions, thus each period is repeated 8 times
+#Thus, each season's vector should have the season repeated 8 times periods in the season
 
+#Create a seasons vector 
+Winter = rep("Winter", 16)
+Spring = rep("Spring",24)
+Summer = rep("Summer",24)
+Fall = rep("Fall", 24)
+Seasonsvector = c(Winter, Spring, Summer,Fall)
 
+#Create a seasons data frame with a season column 
+AvocadosSeasons <- AvocadosRegional
+AvocadosSeasons$Season <- Seasonsvector
+head(AvocadosSeasons)
+unique(AvocadosSeasons$Season)
 
-
-plot(AvocadosRegional$Units.Current.Year/1e+07, AvocadosRegional$ASP.Current.Year,
+#Create a Seasons Sale Plot 
+plot(AvocadosSeasons$Units.Current.Year/1e+07, AvocadosSeasons$ASP.Current.Year,
      xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
-     main = "2021 U.S.A. Hass Avocado Demand (4-week Period)", 
-     col = factor(AvocadosRegional$Period), 
+     main = "2021 U.S.A. Hass Avocado Demand (Seasonal)", 
+     col = factor(AvocadosSeasons$Season), 
      yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.1) 
 axis(2,seq(0.5,1.5,0.25))
-legend("topright", legend = levels(factor(AvocadosRegional$Period)), 
-       fill = as.numeric(unique(factor(AvocadosRegional$Period)))) 
+legend("topright", legend = levels(factor(AvocadosSeasons$Season)), 
+       fill = as.numeric(unique(factor(AvocadosSeasons$Season)))) 
+
+
+#--------------------------------------------------Export Avocado Seasons as CSV 
+write.csv(AvocadosSeasons,"C:\\Users\\zara\\Documents\\
+          Data Science Portfolio_Zara Clacken\\2021 Avocado Regional & Seasonal Sales.csv", 
+          row.names = FALSE)
+
+#-----------------------------------------------------Regional and Seasonal Plot 
+
+#Create a function to plot demand per region according to season 
+RegionSeasonplot <- function(season){
+  plot(AvocadosSeasons[AvocadosSeasons$Season == season,]$Units.Current.Year/1e+07, 
+       AvocadosSeasons[AvocadosSeasons$Season == season,]$ASP.Current.Year,
+       xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
+       main = "2021 U.S.A. Hass Avocado Regional Demand", 
+       col = factor(AvocadosSeasons$Geography), 
+       yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.1) 
+  axis(2,seq(0.75,1.35,0.10))
+  legend("topright", legend = levels(factor(AvocadosSeasons$Geography)), 
+         fill = as.numeric(unique(factor(AvocadosSeasons$Geography)))) 
+}
+
+#Create Regional Plot For Each Season Using Function 
+RegionSeasonplot(Summer)
+
+
 
