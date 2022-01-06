@@ -242,7 +242,7 @@ plt <- barplot(height = AvocadosTotalRegionSales$Total.Sales/1e+06,
 axis(2,seq(0,400,100))
 #Create x-axis labels that are diagonally rotated 
 text(plt, par("usr")[3]-4, srt = 60, adj = 1, xpd = TRUE,
-     labels = factor(AvocadosTotalRegionSales$Region), cex = 1, offset = 2)
+     labels = factor(AvocadosTotalRegionSales$Region), cex = 1)
 
 #---------------------------------------------------Total Avocado Sales Seasonal
 
@@ -268,13 +268,26 @@ par(mar = c(6, 7, 4, 8) + 0.1)
 plt2 <- barplot(height = AvocadosTotalSeasonSales$Total.Sales/1e+06, 
                ylab = "Units Sold (Millions)", 
                main = "2021 Total Avocado Sales (Seasonal)", 
-               yaxt = "none", xaxt = "none", col = factor(AvocadosTotalSeasonSales$Season),
+               yaxt = "none", xaxt = "none", 
+               col = factor(AvocadosTotalSeasonSales$Season),
                space = 0.2)
 #format y-axis
 axis(2,seq(0,500,100))
 #Create x-axis labels that are diagonally rotated 
 text(plt2, par("usr")[3]-6, srt = 60, adj = 1, xpd = TRUE,
-     labels = factor(AvocadosTotalSeasonSales$Season), cex = 1, offset = 2)
+     labels = factor(AvocadosTotalSeasonSales$Season), cex = 1)
+
+
+#-----------------------------------------------------Regional Demand Elasticity 
+
+
+
+
+
+
+
+
+
 
 
 
