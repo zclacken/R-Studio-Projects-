@@ -137,13 +137,13 @@ lines(y= Pvector,x = Qvector/1e+08,type = "l", col = "Blue", lwd = 2, lty = 1)
 #Add regression equation to plot
 text(x=1.79, y=1.10, "P = 2.46378 - 8.021717e-09Q ",col="Black", font=c(2,3), cex=0.8)
 
-#------------------------------------------------Regional Demand Plot 
+#-----------------------------------------------------------Regional Demand Plot 
 plot(AvocadosRegional$Units.Current.Year/1e+07, AvocadosRegional$ASP.Current.Year,
      xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
      main = "2021 U.S.A. Hass Avocado Demand (Regional)", 
      col = factor(AvocadosRegional$Geography), 
-     yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.1) 
-axis(2,seq(0.5,1.5,0.25))
+     yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.5) 
+axis(2,seq(0.5,1.35,0.10))
 legend("topright", legend = levels(factor(AvocadosRegional$Geography)), 
        fill = as.numeric(unique(factor(AvocadosRegional$Geography)))) 
 
@@ -183,16 +183,10 @@ plot(AvocadosSeasons$Units.Current.Year/1e+07, AvocadosSeasons$ASP.Current.Year,
      xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
      main = "2021 U.S.A. Hass Avocado Demand (Seasonal)", 
      col = factor(AvocadosSeasons$Season), 
-     yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.1) 
-axis(2,seq(0.5,1.5,0.25))
+     yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.5) 
+axis(2,seq(0.5,1.35,0.10))
 legend("topright", legend = levels(factor(AvocadosSeasons$Season)), 
        fill = as.numeric(unique(factor(AvocadosSeasons$Season)))) 
-
-
-#--------------------------------------------------Export Avocado Seasons as CSV 
-write.csv(AvocadosSeasons,"C:\\Users\\zara\\Documents\\
-          Data Science Portfolio_Zara Clacken\\2021 Avocado Regional & Seasonal Sales.csv", 
-          row.names = FALSE)
 
 #-----------------------------------------------------Regional and Seasonal Plot 
 
@@ -203,8 +197,8 @@ RegionSeasonplot <- function(season, title){
        xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
        main = title, 
        col = factor(AvocadosSeasons$Geography), 
-       yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.1) 
-  axis(2,seq(0.75,1.35,0.10))
+       yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =2) 
+  axis(2,seq(0.5,1.5,0.10))
   legend("topright", legend = levels(factor(AvocadosSeasons$Geography)), 
          fill = as.numeric(unique(factor(AvocadosSeasons$Geography)))) 
 }
@@ -214,6 +208,41 @@ RegionSeasonplot(Winter,"2021 U.S.A Hass Avocado Regional Demand (Winter)")
 RegionSeasonplot(Spring,"2021 U.S.A Hass Avocado Regional Demand (Spring)")
 RegionSeasonplot(Summer,"2021 U.S.A Hass Avocado Regional Demand (Summer)")
 RegionSeasonplot(Fall,"2021 U.S.A Hass Avocado Regional Demand (Fall)")
+
+
+#-----------------------------------------------------Total Sales by Region Plot
+
+#Create a vector containing the annual total for each region 
+regioncount = as.vector(seq(1,8))
+regiontotals <- c()
+for (r in regioncount) {
+  sums = sum(AvocadosSeasons[AvocadosSeasons == Regions[r],]$Units.Current.Year)
+  print(sums)
+  regiontotals <- c(regiontotals,sums)
+}
+regiontotals
+
+#Create a table for region totals and region; sorted from highest to lowest sales 
+AvocadosTotalRegionSales <- data.frame("Region" = Regions,"Total Sales" = regiontotals)
+AvocadosTotalRegionSales <- AvocadosTotalRegionSales[order(AvocadosTotalRegionSales$Total.Sales,decreasing = FALSE),]
+head(AvocadosTotalRegionSales)
+
+#Create a bar chart for total region sales
+?barplot
+unique(AvocadosTotalRegionSales$Region) 
+
+#Adjust the size and margins of the plot
+par(mar = c(5, 7, 4, 8) + 0.1)  
+barplot(height = AvocadosTotalRegionSales$Total.Sales/1e+06, 
+        xlab = "Units Sold (Millions)", 
+        main = "2021 Total Avocado Sales (Regional)", 
+        xaxt = "none", col = factor(AvocadosTotalRegionSales$Region),
+        space = 0.5,names.arg = unique(AvocadosTotalRegionSales$Region),
+        cex.names = 1, las = 1, horiz = TRUE)
+axis(1,seq(0,400,100))
+
+
+#---------------------------------------------------Total Avocado Sales Seasonal
 
 
 
