@@ -72,11 +72,6 @@ str(AvocadosRegional)
 head(Avocadosregional,10) 
 unique(AvocadosRegional$Geography)
 
-#Export Data Frame as CSV
-write.csv(AvocadosRegional,"C:\\Users\\zara\\Documents\\
-          Data Science Portfolio_Zara Clacken\\Avocados_Project_Regional.csv", 
-          row.names = FALSE)
-
 #--------------------------------------------National Demand and Price Equations
 colnames(AvocadosRegional)
 Nationaldemandregression = lm(AvocadosNational$Units.Current.Year ~ 
@@ -265,18 +260,14 @@ head(AvocadosTotalSeasonSales)
 #Adjust the size and margins of the plot
 par(mar = c(6, 7, 4, 8) + 0.1) 
 #create plot 
-plt2 <- barplot(height = AvocadosTotalSeasonSales$Total.Sales/1e+06, 
+barplot(height = AvocadosTotalSeasonSales$Total.Sales/1e+06, 
                ylab = "Units Sold (Millions)", 
                main = "2021 Total U.S.A. Hass Avocado Sales (Seasonal)", 
-               yaxt = "none", xaxt = "none", 
+               yaxt = "none", names.arg = factor(AvocadosTotalSeasonSales$Season) , 
                col = factor(AvocadosTotalSeasonSales$Season),
                space = 0.2)
 #format y-axis
 axis(2,seq(0,500,100))
-#Create x-axis labels that are diagonally rotated 
-text(plt2, par("usr")[3]-6, srt = 60, adj = 1, xpd = TRUE,
-     labels = factor(AvocadosTotalSeasonSales$Season), cex = 1)
-
 
 #--------------------------------------------Create data frame for 2021 Revenues 
 colnames(AvocadosSeasons)
@@ -338,14 +329,65 @@ head(AvocadosTotalSeasonRevenues)
 #Adjust the size and margins of the plot
 par(mar = c(6, 7, 4, 8) + 0.1) 
 #create plot 
-plt4 <- barplot(height = AvocadosTotalSeasonRevenues$Total.Revenue/1e+06, 
+barplot(height = AvocadosTotalSeasonRevenues$Total.Revenue/1e+06, 
                 ylab = "Revenue (Millions $)", 
                 main = "2021 Total U.S.A. Hass Avocado Revenue (Seasonal)", 
-                yaxt = "none", xaxt = "none", 
+                yaxt = "none", names.arg = factor(AvocadosTotalSeasonRevenues$Season), 
                 col = factor(AvocadosTotalSeasonRevenues$Season),
                 space = 0.2)
 #format y-axis
 axis(2,seq(0,500,100))
-#Create x-axis labels that are diagonally rotated 
-text(plt4, par("usr")[3]-6, srt = 60, adj = 1, xpd = TRUE,
-     labels = factor(AvocadosTotalSeasonRevenues$Season), cex = 1)
+
+
+#------------------------------------------------------------Regional Elasticity 
+
+#Create Data Frame for Price Elasticity
+colnames(AvocadosRevenues)
+
+#Test filter 
+AvocadosRevenues[AvocadosRevenues$Period == 1 & AvocadosRevenues$Geography== "California","Units.Current.Year"]
+
+#Create a function for calculating Regional point elasticity 
+elasticityfunc <- function(region){
+  Evector = c()
+  for (e in seq(1,11)) {
+    DeltaQ = (AvocadosRevenues[AvocadosRevenues$Period == e & AvocadosRevenues$Geography== region,"Units.Current.Year"]
+    - AvocadosRevenues[AvocadosRevenues$Period == (e-1) & AvocadosRevenues$Geography== region,"Units.Current.Year"]) 
+    DeltaP = round((AvocadosRevenues[AvocadosRevenues$Period == e & AvocadosRevenues$Geography== region,"ASP.Current.Year"]
+    - AvocadosRevenues[AvocadosRevenues$Period == (e-1) & AvocadosRevenues$Geography== region,"ASP.Current.Year"]),2)  
+    Q = AvocadosRevenues[AvocadosRevenues$Period == e & AvocadosRevenues$Geography== region,"Units.Current.Year"]
+    P = round(AvocadosRevenues[AvocadosRevenues$Period == e & AvocadosRevenues$Geography== region,"ASP.Current.Year"],2)
+    E = (DeltaQ/DeltaP)*(P/Q)
+    Evector = c(Evector,E)
+  }
+  Evector
+}
+
+unique(AvocadosRevenues$Geography)
+
+#Create vectors 
+California_elasticity = elasticityfunc("California")
+Great_Lakes_elasticity =elasticityfunc("Great Lakes")
+Midsouth_elasticity = elasticityfunc("Midsouth")
+Northeast_elasticity = elasticityfunc("Northeast")
+Plains_elasticity = elasticityfunc("Plains")
+South_Central_elasticity = elasticityfunc("South Central")
+Southeast_elasticity = elasticityfunc("Southeast")
+West_elasticity = elasticityfunc("West")
+
+#Create data frame of Regional Elasticities 
+AvocadosElasticity = data.frame("Period" = seq(2,11),
+                                "California" = California_elasticity, 
+                                "Great Lakes" = Great_Lakes_elasticity,
+                                "Midsouth" = Midsouth_elasticity, 
+                                "Northeast" = Northeast_elasticity,
+                                "Plains" = Plains_elasticity, 
+                                "South Central" = South_Central_elasticity,
+                                "Southeast" = Southeast_elasticity, 
+                                "West" = West_elasticity)
+head(AvocadosElasticity)
+
+
+
+
+
