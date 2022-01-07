@@ -410,7 +410,19 @@ for (z in seq(2,11)) {
   periodreplist = c(periodreplist,rep(z,8)) 
 }
 
-#Merge the above 3 vectors into a data frame
+#Merge the above 3 vectors into a machine-readable data frame
 AvocadosElasticityMachineReadable = data.frame("Period" = periodreplist, "Region" = repregions10times,
                                  "Elasticity" = elasticitieslist)
 head(AvocadosElasticityMachineReadable)
+
+#----------------------------------------------------------------Plot Elasticity
+
+plot(x = AvocadosElasticityMachineReadable$Period,
+     y = AvocadosElasticityMachineReadable$Elasticity, 
+     xlab = "Period", ylab = "Elasticity",
+     main = "2021 Hass Avocado Regional Price Elasticity", 
+     col = factor(AvocadosElasticityMachineReadable$Region), pch = 18, cex=2,
+     xlim = c(2,15) )
+legend("topright", legend = levels(factor(AvocadosElasticityMachineReadable$Region)), 
+       fill = as.numeric(unique(factor(AvocadosElasticityMachineReadable$Region)))) 
+
