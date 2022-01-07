@@ -341,13 +341,13 @@ axis(2,seq(0,500,100))
 
 #------------------------------------------------------------Regional Elasticity 
 
-#Create Data Frame for Price Elasticity
 colnames(AvocadosRevenues)
 
 #Test filter 
 AvocadosRevenues[AvocadosRevenues$Period == 1 & AvocadosRevenues$Geography== "California","Units.Current.Year"]
 
 #Create a function for calculating Regional point elasticity 
+#Prices should be rounded to two decimal places to prevent strange results 
 elasticityfunc <- function(region){
   Evector = c()
   for (e in seq(1,11)) {
@@ -365,7 +365,7 @@ elasticityfunc <- function(region){
 
 unique(AvocadosRevenues$Geography)
 
-#Create vectors 
+#Create vectors of regions' elasticities 
 California_elasticity = elasticityfunc("California")
 Great_Lakes_elasticity =elasticityfunc("Great Lakes")
 Midsouth_elasticity = elasticityfunc("Midsouth")
@@ -375,19 +375,44 @@ South_Central_elasticity = elasticityfunc("South Central")
 Southeast_elasticity = elasticityfunc("Southeast")
 West_elasticity = elasticityfunc("West")
 
-#Create data frame of Regional Elasticities 
-AvocadosElasticity = data.frame("Period" = seq(2,11),
-                                "California" = California_elasticity, 
-                                "Great Lakes" = Great_Lakes_elasticity,
-                                "Midsouth" = Midsouth_elasticity, 
-                                "Northeast" = Northeast_elasticity,
-                                "Plains" = Plains_elasticity, 
-                                "South Central" = South_Central_elasticity,
-                                "Southeast" = Southeast_elasticity, 
-                                "West" = West_elasticity)
+#-------------------------------------Create data frame of Regional Elasticities
+
+#Use rbind to set the regions as the rows  
+AvocadosElasticity = data.frame(rbind("California" = California_elasticity, 
+                           "Great Lakes" = Great_Lakes_elasticity,
+                           "Midsouth" = Midsouth_elasticity, 
+                           "Northeast" = Northeast_elasticity,
+                           "Plains" = Plains_elasticity, 
+                           "South Central" = South_Central_elasticity,
+                           "Southeast" = Southeast_elasticity,
+                           "West" = West_elasticity))
+colnames(AvocadosElasticity) = seq(2,11)
 head(AvocadosElasticity)
 
+------------------------------------------------------#Rearrange Elasticity df 1 
+Regions
+
+#Create a vector where regions set is repeated 10 times
+repregions10times = rep(Regions,10)
+repregions10times
+
+#Create a vector of all elasticities   
+elasticitieslist = c()
+for (w in seq(1,10)){
+  elasticity = AvocadosElasticity[,w]
+  elasticitieslist = c(elasticitieslist,elasticity)
+}
+elasticitieslist
+
+#Create a vector where each period number is repeated 8 times 
+
+#----------------------------------------------------------------Plot Elasticity
+
+#Transpose Avocados Elasticity Table, so that regions are columns, for plotting 
 
 
-
+plot(AvocadosElasticity["California",1:10], x = seq(2,11), 
+     xlab = "Period", ylab = "Elasticity",
+     main = "2021 Hass Avocado Regional Price Elasticity" )
+lines(AvocadosElasticity["Great Lakes",1:10], x = seq(2,11))
 
