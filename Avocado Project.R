@@ -389,7 +389,7 @@ AvocadosElasticity = data.frame(rbind("California" = California_elasticity,
 colnames(AvocadosElasticity) = seq(2,11)
 head(AvocadosElasticity)
 
-------------------------------------------------------#Rearrange Elasticity df 1 
+--------------------------------------#Make Avocados Elasticity Machine-Readable 
 Regions
 
 #Create a vector where regions set is repeated 10 times
@@ -404,15 +404,13 @@ for (w in seq(1,10)){
 }
 elasticitieslist
 
-#Create a vector where each period number is repeated 8 times 
+#Create a vector where each period number is repeated 8 times
+periodreplist = c()
+for (z in seq(2,11)) {
+  periodreplist = c(periodreplist,rep(z,8)) 
+}
 
-#----------------------------------------------------------------Plot Elasticity
-
-#Transpose Avocados Elasticity Table, so that regions are columns, for plotting 
-
-
-plot(AvocadosElasticity["California",1:10], x = seq(2,11), 
-     xlab = "Period", ylab = "Elasticity",
-     main = "2021 Hass Avocado Regional Price Elasticity" )
-lines(AvocadosElasticity["Great Lakes",1:10], x = seq(2,11))
-
+#Merge the above 3 vectors into a data frame
+AvocadosElasticityMachineReadable = data.frame("Period" = periodreplist, "Region" = repregions10times,
+                                 "Elasticity" = elasticitieslist)
+head(AvocadosElasticityMachineReadable)
