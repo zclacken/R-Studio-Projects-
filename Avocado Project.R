@@ -235,7 +235,7 @@ par(mar = c(6, 7, 4, 8) + 0.1)
 #create plot 
 plt <- barplot(height = AvocadosTotalRegionSales$Total.Sales/1e+06, 
         ylab = "Units Sold (Millions)", 
-        main = "2021 Total Avocado Sales (Regional)", 
+        main = "2021 Total U.S.A. Hass Avocado Sales (Regional)", 
         yaxt = "none", xaxt = "none", col = factor(AvocadosTotalRegionSales$Region),
         space = 0.2)
 #format y-axis
@@ -267,7 +267,7 @@ par(mar = c(6, 7, 4, 8) + 0.1)
 #create plot 
 plt2 <- barplot(height = AvocadosTotalSeasonSales$Total.Sales/1e+06, 
                ylab = "Units Sold (Millions)", 
-               main = "2021 Total Avocado Sales (Seasonal)", 
+               main = "2021 Total U.S.A. Hass Avocado Sales (Seasonal)", 
                yaxt = "none", xaxt = "none", 
                col = factor(AvocadosTotalSeasonSales$Season),
                space = 0.2)
@@ -278,16 +278,60 @@ text(plt2, par("usr")[3]-6, srt = 60, adj = 1, xpd = TRUE,
      labels = factor(AvocadosTotalSeasonSales$Season), cex = 1)
 
 
-#-----------------------------------------------------Regional Demand Elasticity 
+#--------------------------------------------Create data frame for 2021 Revenues 
+colnames(AvocadosSeasons)
+AvocadosRevenues <- AvocadosSeasons[,c("Geography","Period","Units.Current.Year",
+                                       "Dollars.Current.Year","ASP.Current.Year",
+                                       "Season")]
+head(AvocadosRevenues)
+#--------------------------------------------------------Regional Revenue Totals 
 
+#Create a vector containing the year totals for region 
+regioncount = as.vector(seq(1,8))
+regionrevenues <- c()
+for (r in regioncount) {
+  revsums = sum(AvocadosRevenues[AvocadosRevenues == Regions[r],]$Dollars.Current.Year)
+  regionrevenues <- c(regionrevenues,revsums)
+}
+regionrevenues
 
+#Create a table for region totals and region; sorted from highest to lowest sales 
+AvocadosTotalRegionRevenues <- data.frame("Region" = Regions,"Total Revenue" = regionrevenues)
+rev_in_order = order(AvocadosTotalRegionRevenues$Total.Revenue, decreasing = TRUE)
+AvocadosTotalRegionRevenues <- AvocadosTotalRegionRevenues[rev_in_order,]   
+head(AvocadosTotalRegionRevenues)  
 
+#----------------------------------------------Regional Revenues Totals Bar Plot
 
+#Adjust the size and margins of the plot
+par(mar = c(6, 7, 4, 8) + 0.1) 
+#create plot 
+plt3 <- barplot(height = AvocadosTotalRegionRevenues$Total.Revenue/1e+06, 
+               ylab = "Revenue (Millions $)", 
+               main = "2021 Total Avocado Revenues (Regional)", 
+               yaxt = "none", xaxt = "none", col = factor(AvocadosTotalRegionRevenues$Region),
+               space = 0.2)
+#format y-axis
+axis(2,seq(0,400,100))
+#Create x-axis labels that are diagonally rotated 
+text(plt3, par("usr")[3]-4, srt = 60, adj = 1, xpd = TRUE,
+     labels = factor(AvocadosTotalRegionRevenues$Region), cex = 1)
 
+#-------------------------------------------------------Seasonal Revenues Totals  
 
+#Create Seasonal Sales Total Data Frame
+WSSF = c("Winter", "Spring", "Summer", "Fall")
+seasonalrevenues = c()
+for (s in seq(1,4)) {
+  revsums2 = sum(AvocadosRevenues[AvocadosRevenues$Season == WSSF[s],"Dollars.Current.Year"])
+  seasonalrevenues = c(seasonalrevenues,revsums2)
+}
+seasonalrevenues
 
+AvocadosTotalSeasonRevenues <- data.frame("Season" = WSSF,"Total Revenue" = seasonalrevenues)
+totals_in_order3 = order(AvocadosTotalSeasonRevenues$Total.Revenue, decreasing = TRUE)
+AvocadosTotalSeasonRevenues <- AvocadosTotalSeasonRevenues[totals_in_order3,]   
+head(AvocadosTotalSeasonRevenues)
 
-
-
-
+#-----------------------------------------------Seasonal Total Revenues Bar Plot
 
