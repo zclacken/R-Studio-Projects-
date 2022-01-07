@@ -308,7 +308,7 @@ par(mar = c(6, 7, 4, 8) + 0.1)
 #create plot 
 plt3 <- barplot(height = AvocadosTotalRegionRevenues$Total.Revenue/1e+06, 
                ylab = "Revenue (Millions $)", 
-               main = "2021 Total Avocado Revenues (Regional)", 
+               main = "2021 Total Hass Avocado Revenue (Regional)", 
                yaxt = "none", xaxt = "none", col = factor(AvocadosTotalRegionRevenues$Region),
                space = 0.2)
 #format y-axis
@@ -335,3 +335,17 @@ head(AvocadosTotalSeasonRevenues)
 
 #-----------------------------------------------Seasonal Total Revenues Bar Plot
 
+#Adjust the size and margins of the plot
+par(mar = c(6, 7, 4, 8) + 0.1) 
+#create plot 
+plt4 <- barplot(height = AvocadosTotalSeasonRevenues$Total.Revenue/1e+06, 
+                ylab = "Revenue (Millions $)", 
+                main = "2021 Total U.S.A. Hass Avocado Revenue (Seasonal)", 
+                yaxt = "none", xaxt = "none", 
+                col = factor(AvocadosTotalSeasonRevenues$Season),
+                space = 0.2)
+#format y-axis
+axis(2,seq(0,500,100))
+#Create x-axis labels that are diagonally rotated 
+text(plt4, par("usr")[3]-6, srt = 60, adj = 1, xpd = TRUE,
+     labels = factor(AvocadosTotalSeasonRevenues$Season), cex = 1)
