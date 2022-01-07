@@ -428,4 +428,10 @@ legend("topright", legend = levels(factor(AvocadosElasticityMachineReadable$Regi
        cex = 0.99,
        fill = as.numeric(unique(factor(AvocadosElasticityMachineReadable$Region)))) 
 
+#---------------------------------------------------------------Final Data Frame
 
+Elasticityfinalist = c(rep("NA",8),AvocadosElasticityMachineReadable$Elasticity)
+Elasticityfinalist
+
+Avocados2021MarketDemand = data.frame(AvocadosRevenues,"Elasticity" = Elasticityfinalist)
+head(Avocados2021MarketDemand)
