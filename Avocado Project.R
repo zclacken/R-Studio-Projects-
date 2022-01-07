@@ -433,5 +433,18 @@ legend("topright", legend = levels(factor(AvocadosElasticityMachineReadable$Regi
 Elasticityfinalist = c(rep("NA",8),AvocadosElasticityMachineReadable$Elasticity)
 Elasticityfinalist
 
-Avocados2021MarketDemand = data.frame(AvocadosRevenues,"Elasticity" = Elasticityfinalist)
+Avocados2021MarketDemand = data.frame(AvocadosSeasons[,c(1:3,5,7,9:10)],"Elasticity" = Elasticityfinalist)
 head(Avocados2021MarketDemand)
+colnames(Avocados2021MarketDemand) = c("Region", "Period (4-week)", "Period End Date/Time", 
+                                       "Units Sold","Revenue","Average Sales Price",
+                                       "Season","Price Elasticity")
+
+
+head(Avocados2021MarketDemand) 
+
+#--------------------------------------------------------Export Final Data Frame 
+
+write.csv(Avocados2021MarketDemand,
+          "C:\\Users\\zara\\Documents\\Data Science Portfolio_Zara Clacken\\Project Data Frames Reconstructed by Me\\2021 U.S. Avocado Market Demand & Elasticity.csv", 
+          row.names = FALSE)
+
