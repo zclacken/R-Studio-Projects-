@@ -417,12 +417,15 @@ head(AvocadosElasticityMachineReadable)
 
 #----------------------------------------------------------------Plot Elasticity
 
+par(mar = c(5, 4, 3, 2.5) + 0.1) 
 plot(x = AvocadosElasticityMachineReadable$Period,
      y = AvocadosElasticityMachineReadable$Elasticity, 
      xlab = "Period", ylab = "Elasticity",
      main = "2021 Hass Avocado Regional Price Elasticity", 
      col = factor(AvocadosElasticityMachineReadable$Region), pch = 18, cex=2,
-     xlim = c(2,15) )
-legend("topright", legend = levels(factor(AvocadosElasticityMachineReadable$Region)), 
+     xlim = c(2,15))
+legend("topright", legend = levels(factor(AvocadosElasticityMachineReadable$Region)),
+       cex = 0.99,
        fill = as.numeric(unique(factor(AvocadosElasticityMachineReadable$Region)))) 
+
 
