@@ -1,0 +1,91 @@
+#------------------------------------------------------#Import Data Sets 
+getwd()
+Forwards = read.csv("2021-2022 English Premier League Forward List.csv")
+Salary = read.csv("2021-2022 Premier League Forward Annual Salary.csv")
+
+install.packages("tidyverse")
+#------------------------------------------------Data Cleaning & Mining Forwards
+
+head(Forwards)
+summary(Forwards)
+
+#Convert birth dates to date variables 
+Forwards$born = as.Date.character(Forwards$born,format = "%d/%m/%Y")
+summary(Forwards)
+str(Forwards)
+head(Forwards)
+
+#Rename birth dates from born to DOB
+Forwards$Birthdate = Forwards$born
+Forwards$born = NULL
+head(Forwards)
+
+#Separate height numbers from cm by space between number and cm 
+library(tidyverse)
+library(magrittr)
+Forwards %<>% separate(Height, c("Height(cm)", "dropcm"), sep = ' ') 
+head(Forwards)
+
+#drop the cm column
+Forwards$dropcm = NULL
+head(Forwards)
+
+#drop the Position column
+Forwards$Position = NULL
+head(Forwards)
+
+#Convert Height column to numeric variables
+Forwards$`Height(cm)`= as.numeric(Forwards$`Height(cm)`)
+str(Forwards)
+head(Forwards)
+
+#Split names into first and last names
+Forwards %<>% separate(Player, c("First_Name", "Last_Name"), sep = ' ') 
+Forwards$Last_Name = as.factor(Forwards$Last_Name)
+Forwards$First_Name = as.factor(Forwards$First_Name)
+head(Forwards)
+str(Forwards)
+
+#Mononymous players' first names as last names
+nrow(Forwards)
+for (i in seq(1,150)) {
+  if(is.na(Forwards$Last_Name[i])) {
+    Forwards$Last_Name[i] = Forwards$First_Name[i]
+  }
+}
+Forwards
+
+#Sort data frames by last name in alphabetical order A-Z
+Forwards[order(Forwards$Last_Name,decreasing = FALSE),]
+head(Forwards)
+
+#--------------------------------------------------Data Cleaning & Mining Salary
+
+head(Salary)
+str(Salary)
+
+#Separate Player into first name and last name
+Salary %<>% separate(PLAYER, c("First_Name", "Last_Name"), sep = ' ') 
+head(Salary)
+
+#Drop rows with the word Forward in them
+nrow(Salary)
+for (j in seq(1,228)) {
+  if(Salary$First_Name[j] == "FORWARD"){
+  Salary = Salary[-j,]
+  }
+}
+head(Salary)
+
+#Drop Team Column
+Salary$TEAM = NULL
+head(Salary)
+
+#Remove the pound sign from in front of the numbers 
+Salary$ANNUAL.SALARY = gsub('[£]', ' ', Salary$ANNUAL.SALARY)
+head(Salary)
+
+#Change Salary to Numeric type
+
+
+head(Salary)
