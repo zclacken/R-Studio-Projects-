@@ -82,10 +82,5 @@ Salary$TEAM = NULL
 head(Salary)
 
 #Remove the pound sign from in front of the numbers 
-Salary$ANNUAL.SALARY = gsub('[£]', ' ', Salary$ANNUAL.SALARY)
-head(Salary)
-
-#Change Salary to Numeric type
-
-
+Salary$ANNUAL.SALARY = gsub('[£,","]', ' ', Salary$ANNUAL.SALARY)
 head(Salary)
