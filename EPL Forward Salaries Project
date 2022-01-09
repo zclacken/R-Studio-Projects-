@@ -16,8 +16,7 @@ str(Forwards)
 head(Forwards)
 
 #Rename birth dates from born to DOB
-Forwards$Birthdate = Forwards$born
-colnames(Forwards)[4] = "Birthdate"
+colnames(Forwards)[3] = "Birthdate"
 head(Forwards)
 
 #Separate height numbers from cm by space between number and cm 
@@ -115,3 +114,7 @@ head(Forwardsalaries)
 
 colnames(Forwardsalaries)[6] = 'Salary(£)' 
 head(Forwardsalaries)
+
+
+
+
