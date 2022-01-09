@@ -92,7 +92,7 @@ Salary$ANNUAL.SALARY = as.numeric(Salary$ANNUAL.SALARY)
 str(Salary)
 
 #Rename ANNUAL.SALARY column
-colnames(Salary)[3] = "Annual_Salary(£)"
+colnames(Salary)[3] = "Salary(£)"
 head(Salary)
 
 
@@ -108,13 +108,3 @@ head(Forwardsalaries)
 #Rename and drop columns as necessary 
 colnames(Forwardsalaries)[2] = "First_Name"
 head(Forwardsalaries)
-
-Forwardsalaries$born = NULL
-head(Forwardsalaries)
-
-colnames(Forwardsalaries)[6] = 'Salary(£)' 
-head(Forwardsalaries)
-
-
-
-
