@@ -123,3 +123,12 @@ min(Forwardsalaries$`Salary(£)`)
 #Add Age Column to Merged Data Frame
 Forwardsalaries$"Age(2021)" = 2021 - as.numeric(format(Forwardsalaries$Birthdate,format = "%Y"))
 head(Forwardsalaries)
+
+#Goals Scored in 2020-2021 Season 
+Forwardsalaries$"Points(2020-2021)" = rep("TBD",71)
+head(Forwardsalaries)
+
+#Nationality
+Forwardsalaries$Nationality = rep("TBD",71)
+head(Forwardsalaries)
+
