@@ -96,7 +96,7 @@ colnames(Salary)[3] = "Salary(£)"
 head(Salary)
 
 
-#----------------------------------------------------Merge Salary & Forwards 
+#-------------------------------------------------------Create merged data frame 
 
 Forwardsalaries = merge.data.frame(Forwards,Salary,by = "Last_Name")
 head(Forwardsalaries)
@@ -107,4 +107,19 @@ head(Forwardsalaries)
 
 #Rename and drop columns as necessary 
 colnames(Forwardsalaries)[2] = "First_Name"
+head(Forwardsalaries)
+
+
+#Drop Players who will earn zero pounds in the 2021-2022 season 
+nrow(Forwardsalaries)
+for (b in seq(1,75)) {
+  if(Forwardsalaries[b,"Salary(£)"] == 0){
+    Forwardsalaries = Forwardsalaries[-b,]
+  }
+}
+#Check to see if 0 is no longer the lowest 
+min(Forwardsalaries$`Salary(£)`)
+
+#Add Age Column to Merged Data Frame
+Forwardsalaries$"Age(2021)" = 2021 - as.numeric(format(Forwardsalaries$Birthdate,format = "%Y"))
 head(Forwardsalaries)
