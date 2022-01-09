@@ -17,7 +17,7 @@ head(Forwards)
 
 #Rename birth dates from born to DOB
 Forwards$Birthdate = Forwards$born
-Forwards$born = NULL
+colnames(Forwards)[4] = "Birthdate"
 head(Forwards)
 
 #Separate height numbers from cm by space between number and cm 
@@ -81,6 +81,37 @@ head(Salary)
 Salary$TEAM = NULL
 head(Salary)
 
-#Remove the pound sign from in front of the numbers 
+#Remove the pound sign and commas from the salaries  
 Salary$ANNUAL.SALARY = gsub('[£,","]', ' ', Salary$ANNUAL.SALARY)
+
+#Remove the white spaces
+Salary$ANNUAL.SALARY = gsub(' ', '', Salary$ANNUAL.SALARY)
 head(Salary)
+
+#Change Salary to Numeric type
+Salary$ANNUAL.SALARY = as.numeric(Salary$ANNUAL.SALARY)
+str(Salary)
+
+#Rename ANNUAL.SALARY column
+colnames(Salary)[3] = "Annual_Salary(£)"
+head(Salary)
+
+
+#----------------------------------------------------Merge Salary & Forwards 
+
+Forwardsalaries = merge.data.frame(Forwards,Salary,by = "Last_Name")
+head(Forwardsalaries)
+
+#Drop extra first name column
+Forwardsalaries$First_Name.y = NULL
+head(Forwardsalaries)
+
+#Rename and drop columns as necessary 
+colnames(Forwardsalaries)[2] = "First_Name"
+head(Forwardsalaries)
+
+Forwardsalaries$born = NULL
+head(Forwardsalaries)
+
+colnames(Forwardsalaries)[6] = 'Salary(£)' 
+head(Forwardsalaries)
