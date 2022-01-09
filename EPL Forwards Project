@@ -1,7 +1,9 @@
 #------------------------------------------------------#Import Data Sets 
 getwd()
+setwd("C:\\Users\\zara\\Documents\\Data Science Portfolio_Zara Clacken\\Data Frames I Created")
 Forwards = read.csv("2021-2022 English Premier League Forward List.csv")
 Salary = read.csv("2021-2022 Premier League Forward Annual Salary.csv")
+Nationalities = read.csv("2021-2022 Premier League Players Nationalities.csv")
 
 install.packages("tidyverse")
 #------------------------------------------------Data Cleaning & Mining Forwards
@@ -95,40 +97,44 @@ str(Salary)
 colnames(Salary)[3] = "Salary(£)"
 head(Salary)
 
+#--------------------------------------------Data Clean Nationalities Data Frame
+
+head(Nationalities)
+
+#Drop players who are not forwards
+Nationalities = Nationalities[Nationalities$Position == "Forward",]   
+head(Nationalities)
+unique(Nationalities$Position)
+
+#Fix Player Name Column 
+head(Nationalities)
+Nationalities %<>% separate(Player, 
+                            c("Photodrop", "fordrop","First_Name","Namedrop","Last_Name"), 
+                            sep = ' ') 
+head(Nationalities)
+Nationalities = Nationalities[,c("First_Name","Last_Name","Position","Nationality")]
+head(Nationalities)
 
 #-------------------------------------------------------Create merged data frame 
 
-Forwardsalaries = merge.data.frame(Forwards,Salary,by = "Last_Name")
-head(Forwardsalaries)
+ForwardProfiles = merge.data.frame(Forwards,Salary, by = "Last_Name")
+ForwardProfiles = merge.data.frame(ForwardProfiles,Nationalities, by = "Last_Name")
+head(ForwardProfiles)
 
-#Drop extra first name column
-Forwardsalaries$First_Name.y = NULL
-head(Forwardsalaries)
-
-#Rename and drop columns as necessary 
-colnames(Forwardsalaries)[2] = "First_Name"
-head(Forwardsalaries)
+#Drop unnecessary columns 
+ForwardProfiles$First_Name.y = NULL
+ForwardProfiles$First_Name = NULL
+ForwardProfiles$Position =NULL
+colnames(ForwardProfiles)[2]  =  "First_Name"
+head(ForwardProfiles)
 
 
 #Drop Players who will earn zero pounds in the 2021-2022 season 
-nrow(Forwardsalaries)
-for (b in seq(1,75)) {
-  if(Forwardsalaries[b,"Salary(£)"] == 0){
-    Forwardsalaries = Forwardsalaries[-b,]
-  }
-}
-#Check to see if 0 is no longer the lowest 
-min(Forwardsalaries$`Salary(£)`)
+nrow(ForwardProfiles)
+min(ForwardProfiles$`Salary(£)`)
+ForwardProfiles = ForwardProfiles[ForwardProfiles$`Salary(£)` != 0,]
+min(ForwardProfiles$`Salary(£)`)
 
 #Add Age Column to Merged Data Frame
-Forwardsalaries$"Age(2021)" = 2021 - as.numeric(format(Forwardsalaries$Birthdate,format = "%Y"))
-head(Forwardsalaries)
-
-#Goals Scored in 2020-2021 Season 
-Forwardsalaries$"Points(2020-2021)" = rep("TBD",71)
-head(Forwardsalaries)
-
-#Nationality
-Forwardsalaries$Nationality = rep("TBD",71)
-head(Forwardsalaries)
-
+ForwardProfiles$"Age(2021)" = 2021 - as.numeric(format(ForwardProfiles$Birthdate,format = "%Y"))
+head(ForwardProfiles)
