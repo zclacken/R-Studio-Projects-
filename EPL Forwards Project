@@ -5,7 +5,7 @@ Forwards = read.csv("2021-2022 English Premier League Forward List.csv")
 Salary = read.csv("2021-2022 Premier League Forward Annual Salary.csv")
 Nationalities = read.csv("2021-2022 Premier League Players Nationalities.csv")
 
-install.packages("tidyverse")
+
 #------------------------------------------------Data Cleaning & Mining Forwards
 
 head(Forwards)
@@ -136,5 +136,10 @@ ForwardProfiles = ForwardProfiles[ForwardProfiles$`Salary(£)` != 0,]
 min(ForwardProfiles$`Salary(£)`)
 
 #Add Age Column to Merged Data Frame
-ForwardProfiles$"Age(2021)" = 2021 - as.numeric(format(ForwardProfiles$Birthdate,format = "%Y"))
+Playerage = as.numeric((Sys.Date()- ForwardProfiles$Birthdate)/365) 
+ForwardProfiles$"Age" = round(Playerage,1)
+head(ForwardProfiles)
+
+#Rename team to current club column
+colnames(ForwardProfiles)[3] = "Current Club"
 head(ForwardProfiles)
