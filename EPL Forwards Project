@@ -4,6 +4,7 @@ setwd("C:\\Users\\zara\\Documents\\Data Science Portfolio_Zara Clacken\\Data Fra
 Forwards = read.csv("2021-2022 English Premier League Forward List.csv")
 Salary = read.csv("2021-2022 Premier League Forward Annual Salary.csv")
 Nationalities = read.csv("2021-2022 Premier League Players Nationalities.csv")
+Contracts = read.csv("2021-2022 EPL Player Contracts Value. csv")
 
 
 #------------------------------------------------Data Cleaning & Mining Forwards
@@ -143,3 +144,33 @@ head(ForwardProfiles)
 #Rename team to current club column
 colnames(ForwardProfiles)[3] = "Current Club"
 head(ForwardProfiles)
+
+#Remove Duplicate Rows
+nrow(ForwardProfiles)
+ForwardProfiles = ForwardProfiles[!duplicated(ForwardProfiles),]
+head(ForwardProfiles)
+nrow(ForwardProfiles)
+
+#-----------------------------------------------Clean Contracts Data Frame
+
+
+
+library(tidyverse)
+library(magrittr)
+Contracts %<>% separate(Player, c("First_Name", "Last_Name"), sep = ' ') 
+Contracts$...1 = NULL
+Contracts$`Average Annual Value` = NULL
+Contracts$First_Name = NULL
+Contracts$`Transfer Fee` = NULL
+Contracts$`Year Signed` = NULL
+
+Contracts$`Contract Value` = gsub('[愼㸳,","]', '', Contracts$`Contract Value`)
+
+head(Contracts)
+
+#-------------------------------------------Merge Contracts with Player Profiles
+ForwardProfiles = merge.data.frame(ForwardProfiles,Contracts, by = "Last_Name")
+head(ForwardProfiles)
+
+colnames(ForwardProfiles)
+nrow(ForwardProfiles)
