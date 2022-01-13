@@ -99,7 +99,7 @@ str(Salary)
 colnames(Salary)[3] = "Salary(£)"
 head(Salary)
 
-#--------------------------------------------Data Clean Nationalities Data Frame
+#-------------------------------------------------------Data Clean Nationalities 
 
 head(Nationalities)
 
@@ -115,6 +115,7 @@ Nationalities %<>% separate(Player,
                             sep = ' ') 
 head(Nationalities)
 Nationalities = Nationalities[,c("First_Name","Last_Name","Position","Nationality")]
+str(Nationalities)
 head(Nationalities)
 
 #-------------------------------------------------------Create merged data frame 
@@ -152,10 +153,7 @@ ForwardProfiles = ForwardProfiles[!duplicated(ForwardProfiles),]
 head(ForwardProfiles)
 nrow(ForwardProfiles)
 
-#-----------------------------------------------Clean Contracts Data Frame
-
-
-
+#-----------------------------------------------------Clean Contracts Data Frame
 library(tidyverse)
 library(magrittr)
 Contracts %<>% separate(Player, c("First_Name", "Last_Name"), sep = ' ') 
@@ -216,15 +214,38 @@ for (v in seq(1,length(numericvariablelist))){
 str(ForwardProfiles)
 
 #Create Dominant Foot Dummy Variable: 1: Left 0: Right 
+str(ForwardProfiles$Dominant.Foot)
 ForwardProfiles$Dominant.Foot = as.factor(ForwardProfiles$Dominant.Foot)
 ForwardProfiles$Foot.Dummy = ifelse(ForwardProfiles$Dominant.Foot == "Right",0, 1)
 ForwardProfiles$Foot.Dummy = as.numeric(ForwardProfiles$Foot.Dummy)
 str(ForwardProfiles$Foot.Dummy)
 
-#Create Nationality Dummy Variable: Foreigner:1 or English:0  
-unique(ForwardProfiles$Nationality)
-str(ForwardProfiles$Nationality)
-ForwardProfiles$Nationality = as.factor(ForwardProfiles$Nationality)
-str(ForwardProfiles$Nationality)
-ForwardProfiles$Nationality.Dummy = ifelse(ForwardProfiles$Nationality == "Ghana", 0, 1)
-ForwardProfiles$Nationality.Dummy
+#Create column for ratio of matches started to matches played
+ForwardProfiles$StartsMatchesRatio = ForwardProfiles$Starts..Prior.to.Contract./ForwardProfiles$Matches..Prior.to.Contract.
+ForwardProfiles$StartsMatchesRatio
+
+#Check column names 
+colnames(ForwardProfiles)
+
+#Create a list of the independent variables 
+xvariableindex = c(5,9,14,16:22)
+
+#Use a for loop to create a vector that has column name and a plus sign between them 
+xvariables = c()
+for (x in 1:length(xvariableindex)){
+  indvar = c(colnames(ForwardProfiles)[xvariableindex[x]],"+")
+  xvariables = c(contractxvariables,indvar)
+}
+as.factor(xvariables)
+
+#Print x variables list without showing index numbers to copy and paste them into regression
+cat(paste(contractxvariables))
+
+  
+#Run regression 
+Contractregression = lm(formula = `Contract.Value(£)` ~ `Height(cm)` + Age.at.Signing + 
+                          Matches..Prior.to.Contract. + Minutes..Prior.to.Contract. + 
+                          Goals..Prior.to.Contract. + SoT.Ratio..Prior.to.Contract. + 
+                          Goal.Shot.Ratio..Prior.to.Contract. + Progressive.Distance..Yds..Prior.to.Contract. + 
+                          Opponents.Dribbled.Past..Prior.to.Contract. + Foot.Dummy, data = ForwardProfiles)
+summary(Contractregression)
