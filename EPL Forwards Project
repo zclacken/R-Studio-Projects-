@@ -252,11 +252,11 @@ summary(Valueregression)
 
 #At alpha = 0.1, only Goals Scored and Matches Played are significant 
 Valueregression2 = lm(formula = `Contract.Value(£)` ~ Goals..Prior.to.Contract. + Matches..Prior.to.Contract., data = ForwardProfiles)
-summary(Contractregression2)
+summary(Valueregression2)
 
 #In model 2, Matches Played is insignificant: Model 3 will be goals only 
 Valueregression3 = lm(formula = `Contract.Value(£)` ~ Goals..Prior.to.Contract., data = ForwardProfiles)
-summary(Contractregression3)
+summary(Valueregression3)
 
 #At alpha = 0.1, the intercept and goals scored  are significant: thus model 3 is satisfactory
 
