@@ -197,7 +197,7 @@ write.csv(ForwardProfiles,
           file = "C:/Users/zara/Documents/Data Science Portfolio_Zara Clacken/Data Frames I Created/2021-2022 EPL Striker Profiles.csv", 
           row.names = FALSE)
 
-#-----------------------------------------------------Contract Value Regressions
+#-----------------------------------------------------Prepare Data for Regressions
 
 #Check  Variable Types of Forward Profiles Data Frame
 str(ForwardProfiles)
@@ -242,10 +242,38 @@ as.factor(xvariables)
 cat(paste(contractxvariables))
 
   
-#Run regression 
-Contractregression = lm(formula = `Contract.Value(£)` ~ `Height(cm)` + Age.at.Signing + 
+#-----------------------------------------------------Contract Value Regressions  
+Valueregression = lm(formula = `Contract.Value(£)` ~ `Height(cm)` + Age.at.Signing + 
                           Matches..Prior.to.Contract. + Minutes..Prior.to.Contract. + 
                           Goals..Prior.to.Contract. + SoT.Ratio..Prior.to.Contract. + 
                           Goal.Shot.Ratio..Prior.to.Contract. + Progressive.Distance..Yds..Prior.to.Contract. + 
                           Opponents.Dribbled.Past..Prior.to.Contract. + Foot.Dummy, data = ForwardProfiles)
-summary(Contractregression)
+summary(Valueregression)
+
+#At alpha = 0.1, only Goals Scored and Matches Played are significant 
+Valueregression2 = lm(formula = `Contract.Value(£)` ~ Goals..Prior.to.Contract. + Matches..Prior.to.Contract., data = ForwardProfiles)
+summary(Contractregression2)
+
+#In model 2, Matches Played is insignificant: Model 3 will be goals only 
+Valueregression3 = lm(formula = `Contract.Value(£)` ~ Goals..Prior.to.Contract., data = ForwardProfiles)
+summary(Contractregression3)
+
+#At alpha = 0.1, the intercept and goals scored  are significant: thus model 3 is satisfactory
+
+
+#--------------------------------------------------------------Contract Duration
+colnames(ForwardProfiles)
+
+Durationregression = lm(formula = Contract.Duration ~ `Height(cm)` + Age.at.Signing + 
+                          Matches..Prior.to.Contract. + Minutes..Prior.to.Contract. + 
+                          Goals..Prior.to.Contract. + SoT.Ratio..Prior.to.Contract. + 
+                          Goal.Shot.Ratio..Prior.to.Contract. + Progressive.Distance..Yds..Prior.to.Contract. + 
+                          Opponents.Dribbled.Past..Prior.to.Contract. + Foot.Dummy, data = ForwardProfiles)
+summary(Durationregression)
+
+#At a significance level of 0.1; only age and the intercept are significant 
+
+Durationregression2 = lm(formula = Contract.Duration ~ Age.at.Signing, data = ForwardProfiles) 
+summary(Durationregression2)
+
+#At a significance level of 0.1, age at signing and intercept significant: model 2 is satisfactory
