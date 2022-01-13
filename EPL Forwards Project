@@ -4,7 +4,8 @@ setwd("C:\\Users\\zara\\Documents\\Data Science Portfolio_Zara Clacken\\Data Fra
 Forwards = read.csv("2021-2022 English Premier League Forward List.csv")
 Salary = read.csv("2021-2022 Premier League Forward Annual Salary.csv")
 Nationalities = read.csv("2021-2022 Premier League Players Nationalities.csv")
-Contracts = read.csv("2021-2022 EPL Player Contracts Value. csv")
+Contracts = read.csv("2021-2022 EPL Contracts.csv")
+Performance = read.csv("2021-2022 EPL Player Pre-Contract Performance.csv")
 
 
 #------------------------------------------------Data Cleaning & Mining Forwards
@@ -142,7 +143,7 @@ ForwardProfiles$"Age" = round(Playerage,1)
 head(ForwardProfiles)
 
 #Rename team to current club column
-colnames(ForwardProfiles)[3] = "Current Club"
+colnames(ForwardProfiles)[3] = "Club"
 head(ForwardProfiles)
 
 #Remove Duplicate Rows
@@ -159,12 +160,18 @@ library(tidyverse)
 library(magrittr)
 Contracts %<>% separate(Player, c("First_Name", "Last_Name"), sep = ' ') 
 Contracts$...1 = NULL
-Contracts$`Average Annual Value` = NULL
+Contracts$Average.Annual.Value = NULL
 Contracts$First_Name = NULL
-Contracts$`Transfer Fee` = NULL
-Contracts$`Year Signed` = NULL
+Contracts$Transfer.Fee = NULL
+Contracts$Year.Signed = NULL
 
-Contracts$`Contract Value` = gsub('[愼㸳,","]', '', Contracts$`Contract Value`)
+#Remove Pound Sterling Symbol and Commas from Contract Value
+
+Contracts$Contract.Value = gsub('[£]', '', Contracts$Contract.Value)
+Contracts$Contract.Value = gsub('[,]', '', Contracts$Contract.Value)
+
+#Rename Contract Value column to include pount sign
+colnames(Contracts)[5]= "Contract.Value(£)"
 
 head(Contracts)
 
@@ -174,3 +181,50 @@ head(ForwardProfiles)
 
 colnames(ForwardProfiles)
 nrow(ForwardProfiles)
+
+
+#-----------------------------Merge Forward Profiles with Performance Data Frame
+
+Performance$First_Name = NULL
+ForwardProfiles = merge.data.frame(ForwardProfiles,Performance, by = "Last_Name")
+head(ForwardProfiles)
+colnames(ForwardProfiles)
+
+ForwardProfiles$X = NULL
+colnames(ForwardProfiles)
+
+#---------------------------------------------Export Forward Profiles Data Frame
+getwd()
+write.csv(ForwardProfiles,
+          file = "C:/Users/zara/Documents/Data Science Portfolio_Zara Clacken/Data Frames I Created/2021-2022 EPL Striker Profiles.csv", 
+          row.names = FALSE)
+
+#-----------------------------------------------------Contract Value Regressions
+
+#Check  Variable Types of Forward Profiles Data Frame
+str(ForwardProfiles)
+colnames(ForwardProfiles)
+head(ForwardProfiles)
+
+#Create a list of columns to be converted to numeric 
+numericvariablelist = c(5,6,8,9,10,11,14:21)
+
+#For loop to convert specified variables into numeric variables 
+for (v in seq(1,length(numericvariablelist))){
+  ForwardProfiles[,numericvariablelist[v]] = as.numeric(ForwardProfiles[,numericvariablelist[v]])
+}  
+str(ForwardProfiles)
+
+#Create Dominant Foot Dummy Variable: 1: Left 0: Right 
+ForwardProfiles$Dominant.Foot = as.factor(ForwardProfiles$Dominant.Foot)
+ForwardProfiles$Foot.Dummy = ifelse(ForwardProfiles$Dominant.Foot == "Right",0, 1)
+ForwardProfiles$Foot.Dummy = as.numeric(ForwardProfiles$Foot.Dummy)
+str(ForwardProfiles$Foot.Dummy)
+
+#Create Nationality Dummy Variable: Foreigner:1 or English:0  
+unique(ForwardProfiles$Nationality)
+str(ForwardProfiles$Nationality)
+ForwardProfiles$Nationality = as.factor(ForwardProfiles$Nationality)
+str(ForwardProfiles$Nationality)
+ForwardProfiles$Nationality.Dummy = ifelse(ForwardProfiles$Nationality == "Ghana", 0, 1)
+ForwardProfiles$Nationality.Dummy
