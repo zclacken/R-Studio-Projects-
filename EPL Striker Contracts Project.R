@@ -296,3 +296,25 @@ plot(x = ForwardProfiles$Goals..Prior.to.Contract., y = ForwardProfiles$`Contrac
      ylim = c(0,100), xlim = c(0,40), col = "Black", pch = 19, cex = 1.1, lwd = 2)
 lines(x = 0:40, y = predictedcontractvalues/1e+06, col = "Blue",lwd = 3)
 text(x=33.9, y=90, "y = 11,021,388 + 1,590,007x  ", col="Blue", font= 4, cex=0.8)
+
+#------------------------------------------------------Predicted vs. Actual Plot
+
+#Create a goals vector based on actual goals for predicted value calculations
+ForwardProfiles$Goals..Prior.to.Contract.
+Goalslist = sort(ForwardProfiles$Goals..Prior.to.Contract.)
+
+#Predicted values based on actual goals 
+Predicted_Values_by_Actual_Goals = as.vector(11021388 + (1590007*Goalslist))
+Predicted_Values_by_Actual_Goals
+
+#Actual contract values column ordered by goals scored column
+Actual_Values_Goal_Order = as.vector(ForwardProfiles[order(ForwardProfiles$Goals..Prior.to.Contract.),"Contract.Value(£)"]) 
+Actual_Values_Goal_Order
+
+plot(x = Predicted_Values_by_Actual_Goals/1e+06, y = Actual_Values_Goal_Order/1e+06,
+     xlab = "Predicted Contract Values", ylab = "Actual Contract Values",
+     main = "Predicted v Actual" , 
+     ylim = c(0,100), xlim = c(0,100), col = "Red", pch = 19, cex = 1.1, lwd = 2)
+
+
+
