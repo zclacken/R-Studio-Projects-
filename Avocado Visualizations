@@ -1,0 +1,139 @@
+#-----------------------------------------------------------Regional Demand Plot 
+plot(AvocadosRegional$Units.Current.Year/1e+07, AvocadosRegional$ASP.Current.Year,
+     xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
+     main = "2021 U.S.A. Hass Avocado Demand (Regional)", 
+     col = factor(AvocadosRegional$Geography), 
+     yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.5) 
+axis(2,seq(0.5,1.35,0.10))
+legend("topright", legend = levels(factor(AvocadosRegional$Geography)), 
+       fill = as.numeric(unique(factor(AvocadosRegional$Geography)))) 
+
+#----------------------------------------------------------Seasonal  Demand Plot 
+
+#Create Seasons Vectors
+
+#Create a periods vector
+Periods = seq(1,11)
+
+#What are the unique dates corresponding to each season?  
+unique(AvocadosSeasons$Current.Year.Week.Ending)
+
+#Winter = Periods 1,2
+#Spring = Periods 3,4,5
+#Summer = Periods 6,7,8
+#Fall = Periods 9,10,11 
+
+#There are 8 regions, thus each period is repeated 8 times
+#Thus, each season's vector should have the season repeated 8 times periods in the season
+
+#Create a seasons vector 
+Winter = rep("Winter", 16)
+Spring = rep("Spring",24)
+Summer = rep("Summer",24)
+Fall = rep("Fall", 24)
+Seasonsvector = c(Winter, Spring, Summer,Fall)
+
+#Create a seasons data frame with a season column 
+AvocadosSeasons <- AvocadosRegional
+AvocadosSeasons$Season <- Seasonsvector
+head(AvocadosSeasons)
+unique(AvocadosSeasons$Season)
+
+#Create a Seasons Sale Plot 
+plot(AvocadosSeasons$Units.Current.Year/1e+07, AvocadosSeasons$ASP.Current.Year,
+     xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
+     main = "2021 U.S.A. Hass Avocado Demand (Seasonal)", 
+     col = factor(AvocadosSeasons$Season), 
+     yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =1.5) 
+axis(2,seq(0.5,1.35,0.10))
+legend("topright", legend = levels(factor(AvocadosSeasons$Season)), 
+       fill = as.numeric(unique(factor(AvocadosSeasons$Season)))) 
+
+#-----------------------------------------------------Regional and Seasonal Plot 
+
+#Create a function to plot demand per region according to season 
+RegionSeasonplot <- function(season, title){
+  plot(AvocadosSeasons[AvocadosSeasons$Season == season,]$Units.Current.Year/1e+07, 
+       AvocadosSeasons[AvocadosSeasons$Season == season,]$ASP.Current.Year,
+       xlab = "Units Sold (Millions)",ylab = "Average Sales Price ($)", 
+       main = title, 
+       col = factor(AvocadosSeasons$Geography), 
+       yaxt ="none",xlim = c(0.5,4.5),lwd = 0.5, pch = 18, cex =2) 
+  axis(2,seq(0.5,1.5,0.10))
+  legend("topright", legend = levels(factor(AvocadosSeasons$Geography)), 
+         fill = as.numeric(unique(factor(AvocadosSeasons$Geography)))) 
+}
+
+#Create Regional Plot For Each Season Using Function 
+RegionSeasonplot(Winter,"2021 U.S.A Hass Avocado Regional Demand (Winter)")
+RegionSeasonplot(Spring,"2021 U.S.A Hass Avocado Regional Demand (Spring)")
+RegionSeasonplot(Summer,"2021 U.S.A Hass Avocado Regional Demand (Summer)")
+RegionSeasonplot(Fall,"2021 U.S.A Hass Avocado Regional Demand (Fall)")
+
+
+#-------------------------------------------------Total Sales by Region Bar Plot 
+
+#Adjust the size and margins of the plot
+par(mar = c(6, 7, 4, 8) + 0.1) 
+#create plot 
+plt <- barplot(height = AvocadosTotalRegionSales$Total.Sales/1e+06, 
+        ylab = "Units Sold (Millions)", 
+        main = "2021 Total U.S.A. Hass Avocado Sales (Regional)", 
+        yaxt = "none", xaxt = "none", col = factor(AvocadosTotalRegionSales$Region),
+        space = 0.2)
+#format y-axis
+axis(2,seq(0,400,100))
+#Create x-axis labels that are diagonally rotated 
+text(plt, par("usr")[3]-4, srt = 60, adj = 1, xpd = TRUE,
+     labels = factor(AvocadosTotalRegionSales$Region), cex = 1)
+     
+     
+#--------------------------------------------------Total Seasonal Sales Bar Plot
+
+#Adjust the size and margins of the plot
+par(mar = c(6, 7, 4, 8) + 0.1) 
+#create plot 
+barplot(height = AvocadosTotalSeasonSales$Total.Sales/1e+06, 
+               ylab = "Units Sold (Millions)", 
+               main = "2021 Total U.S.A. Hass Avocado Sales (Seasonal)", 
+               yaxt = "none", names.arg = factor(AvocadosTotalSeasonSales$Season) , 
+               col = factor(AvocadosTotalSeasonSales$Season),
+               space = 0.2)
+#format y-axis
+axis(2,seq(0,500,100))   
+
+#-----------------------------------------------Seasonal Total Revenues Bar Plot
+
+#Adjust the size and margins of the plot
+par(mar = c(6, 7, 4, 8) + 0.1) 
+#create plot 
+barplot(height = AvocadosTotalSeasonRevenues$Total.Revenue/1e+06, 
+                ylab = "Revenue (Millions $)", 
+                main = "2021 Total U.S.A. Hass Avocado Revenue (Seasonal)", 
+                yaxt = "none", names.arg = factor(AvocadosTotalSeasonRevenues$Season), 
+                col = factor(AvocadosTotalSeasonRevenues$Season),
+                space = 0.2)
+#format y-axis
+axis(2,seq(0,500,100))
+
+#----------------------------------------------------------------Plot Elasticity
+
+par(mar = c(5, 4, 3, 2.5) + 0.1) 
+plot(x = AvocadosElasticityMachineReadable$Period,
+     y = AvocadosElasticityMachineReadable$Elasticity, 
+     xlab = "Period", ylab = "Elasticity",
+     main = "2021 Hass Avocado Regional Price Elasticity", 
+     col = factor(AvocadosElasticityMachineReadable$Region), pch = 18, cex=2,
+     xlim = c(2,15))
+legend("topright", legend = levels(factor(AvocadosElasticityMachineReadable$Region)),
+       cex = 0.99,
+       fill = as.numeric(unique(factor(AvocadosElasticityMachineReadable$Region)))) 
+
+
+
+
+
+
+
+
+
