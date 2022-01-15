@@ -261,23 +261,6 @@ summary(Valueregression3)
 #At alpha = 0.1, the intercept and goals scored  are significant: thus model 3 is satisfactory
 
 
-#--------------------------------------------------Contract Duration Regressions
-colnames(ForwardProfiles)
-
-Durationregression = lm(formula = Contract.Duration ~ `Height(cm)` + Age.at.Signing + 
-                          Matches..Prior.to.Contract. + Minutes..Prior.to.Contract. + 
-                          Goals..Prior.to.Contract. + SoT.Ratio..Prior.to.Contract. + 
-                          Goal.Shot.Ratio..Prior.to.Contract. + Progressive.Distance..Yds..Prior.to.Contract. + 
-                          Opponents.Dribbled.Past..Prior.to.Contract. + Foot.Dummy, data = ForwardProfiles)
-summary(Durationregression)
-
-#At a significance level of 0.1; only age and the intercept are significant 
-
-Durationregression2 = lm(formula = Contract.Duration ~ Age.at.Signing, data = ForwardProfiles) 
-summary(Durationregression2)
-
-#At a significance level of 0.1, age at signing and intercept significant: model 2 is satisfactory
-
 #--------------------------------------------------Contract Values v. Goals Plot
 colnames(ForwardProfiles)
 max(ForwardProfiles$Goals..Prior.to.Contract.)
@@ -311,10 +294,15 @@ Predicted_Values_by_Actual_Goals
 Actual_Values_Goal_Order = as.vector(ForwardProfiles[order(ForwardProfiles$Goals..Prior.to.Contract.),"Contract.Value(£)"]) 
 Actual_Values_Goal_Order
 
+PredictedvActualRegression = lm(Actual_Values_Goal_Order ~ Predicted_Values_by_Actual_Goals)
+summary(PredictedvActualRegression)
+
+
 plot(x = Predicted_Values_by_Actual_Goals/1e+06, y = Actual_Values_Goal_Order/1e+06,
      xlab = "Predicted Contract Values", ylab = "Actual Contract Values",
      main = "Predicted v Actual" , 
-     ylim = c(0,100), xlim = c(0,100), col = "Red", pch = 19, cex = 1.1, lwd = 2)
+     ylim = c(0,100), xlim = c(0,70), col = "Red", pch = 19, cex = 1.1, lwd = 2)
+lines(x = 0:70, y = 0:70, col = "Blue",lwd = 3)
 
 
-
+#-----------------------------------------------------------------Residuals Plot  
