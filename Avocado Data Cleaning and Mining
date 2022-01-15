@@ -1,0 +1,246 @@
+#--------------------------------------------------------------Import Data Frame
+
+#Check and Set Working Directory
+getwd()
+setwd("C:\\Users\\zara\\Documents\\Data Science Portfolio_Zara Clacken")
+getwd()
+
+#Import Data Frame
+AvocadosRaw = read.csv("2021 Avocado Market Region Sales and Price Data.csv")
+
+#-------------------------------------------------------------------Explore Data
+
+#column names
+colnames(AvocadosRaw)
+
+#unique data of Geography column: I will use them as the row labels
+unique(AvocadosRaw$Geography) 
+
+#Count Rows
+nrow(AvocadosRaw)
+
+#Check Data Frame's Structure
+str(AvocadosRaw) # check structure of data 
+
+
+#---------------------------------------------------------Data Mining & Cleaning
+
+#Change Geography, Period, and Current Year Week Ending to factor
+AvocadosRaw$Geography <- as.factor(AvocadosRaw$Geography)
+AvocadosRaw$Period <- as.factor(AvocadosRaw$Period)
+AvocadosRaw$Current.Year.Week.Ending <- as.factor(AvocadosRaw$Current.Year.Week.Ending)
+str(AvocadosRaw)
+
+#Change Current Year Week Ending to Date
+
+
+#Create a Vector for U.S. Regions  
+Regions = c("California",  
+            "Great Lakes", "Midsouth", 
+            "Northeast", "Plains", 
+            "South Central","Southeast", "West")
+
+#Create a Vector for Desired Columns
+columnslist = c("Geography","Period","Current.Year.Week.Ending","Units.Prior.Year" ,
+            "Units.Current.Year","Dollars.Prior.Year","Dollars.Current.Year",
+            "ASP.Prior.Year", 
+            "ASP.Current.Year")
+
+#Count the number of elements in the Regions vector
+length(Regions) 
+
+#Count appearances of regions in data frame
+length(which(AvocadosRaw$Geography == "California")) 
+
+#Create a sequence to represent the indices of the Regions vector
+irange = seq(1,8) 
+
+#Create a for loop to fill a vector containing the indices of each region
+#Use which function to extract row index numbers  
+regionindices = c()
+for (i in irange){
+  indices = which(AvocadosRaw$Geography == Regions[i])
+  regionindices = sort(append(regionindices,indices))  
+} 
+regionindices
+
+#Drop non-region rows and unwanted columns  
+AvocadosRegional = AvocadosRaw[regionindices, columnslist] 
+
+#Check data frame structure again
+str(AvocadosRegional)
+head(Avocadosregional,10) 
+unique(AvocadosRegional$Geography)
+
+#-----------------------------------------------Total Sales by Region Data Frame
+
+#Create a vector containing the annual total for each region 
+regioncount = as.vector(seq(1,8))
+regiontotals <- c()
+for (r in regioncount) {
+  sums = sum(AvocadosSeasons[AvocadosSeasons == Regions[r],]$Units.Current.Year)
+  print(sums)
+  regiontotals <- c(regiontotals,sums)
+}
+regiontotals
+
+#Create a table for region totals and region; sorted from highest to lowest sales 
+AvocadosTotalRegionSales <- data.frame("Region" = Regions,"Total Sales" = regiontotals)
+totals_in_order = order(AvocadosTotalRegionSales$Total.Sales, decreasing = TRUE)
+AvocadosTotalRegionSales <- AvocadosTotalRegionSales[totals_in_order,]   
+head(AvocadosTotalRegionSales)
+
+
+#--------------------------------------------Create data frame for 2021 Revenues 
+colnames(AvocadosSeasons)
+AvocadosRevenues <- AvocadosSeasons[,c("Geography","Period","Units.Current.Year",
+                                       "Dollars.Current.Year","ASP.Current.Year",
+                                       "Season")]
+head(AvocadosRevenues)
+
+
+#--------------------------------------------------------Regional Revenue Totals 
+
+#Create a vector containing the year totals for region 
+regioncount = as.vector(seq(1,8))
+regionrevenues <- c()
+for (r in regioncount) {
+  revsums = sum(AvocadosRevenues[AvocadosRevenues == Regions[r],]$Dollars.Current.Year)
+  regionrevenues <- c(regionrevenues,revsums)
+}
+regionrevenues
+
+#Create a table for region totals and region; sorted from highest to lowest sales 
+AvocadosTotalRegionRevenues <- data.frame("Region" = Regions,"Total Revenue" = regionrevenues)
+rev_in_order = order(AvocadosTotalRegionRevenues$Total.Revenue, decreasing = TRUE)
+AvocadosTotalRegionRevenues <- AvocadosTotalRegionRevenues[rev_in_order,]   
+head(AvocadosTotalRegionRevenues)  
+
+
+#-------------------------------------------------------Seasonal Revenues Totals  
+
+#Create Seasonal Sales Total Data Frame
+WSSF = c("Winter", "Spring", "Summer", "Fall")
+seasonalrevenues = c()
+for (s in seq(1,4)) {
+  revsums2 = sum(AvocadosRevenues[AvocadosRevenues$Season == WSSF[s],"Dollars.Current.Year"])
+  seasonalrevenues = c(seasonalrevenues,revsums2)
+}
+seasonalrevenues
+
+AvocadosTotalSeasonRevenues <- data.frame("Season" = WSSF,"Total Revenue" = seasonalrevenues)
+totals_in_order3 = order(AvocadosTotalSeasonRevenues$Total.Revenue, decreasing = TRUE)
+AvocadosTotalSeasonRevenues <- AvocadosTotalSeasonRevenues[totals_in_order3,]   
+head(AvocadosTotalSeasonRevenues)
+
+
+#------------------------------------------------------------Regional Elasticity 
+
+colnames(AvocadosRevenues)
+
+#Test filter 
+AvocadosRevenues[AvocadosRevenues$Period == 1 & AvocadosRevenues$Geography== "California","Units.Current.Year"]
+
+#Create a function for calculating Regional point elasticity 
+#Prices should be rounded to two decimal places to prevent strange results 
+elasticityfunc <- function(region){
+  Evector = c()
+  for (e in seq(1,11)) {
+    DeltaQ = (AvocadosRevenues[AvocadosRevenues$Period == e & AvocadosRevenues$Geography== region,"Units.Current.Year"]
+    - AvocadosRevenues[AvocadosRevenues$Period == (e-1) & AvocadosRevenues$Geography== region,"Units.Current.Year"]) 
+    DeltaP = round((AvocadosRevenues[AvocadosRevenues$Period == e & AvocadosRevenues$Geography== region,"ASP.Current.Year"]
+    - AvocadosRevenues[AvocadosRevenues$Period == (e-1) & AvocadosRevenues$Geography== region,"ASP.Current.Year"]),2)  
+    Q = AvocadosRevenues[AvocadosRevenues$Period == e & AvocadosRevenues$Geography== region,"Units.Current.Year"]
+    P = round(AvocadosRevenues[AvocadosRevenues$Period == e & AvocadosRevenues$Geography== region,"ASP.Current.Year"],2)
+    E = (DeltaQ/DeltaP)*(P/Q)
+    Evector = c(Evector,E)
+  }
+  Evector
+}
+
+unique(AvocadosRevenues$Geography)
+
+#Create vectors of regions' elasticities 
+California_elasticity = elasticityfunc("California")
+Great_Lakes_elasticity =elasticityfunc("Great Lakes")
+Midsouth_elasticity = elasticityfunc("Midsouth")
+Northeast_elasticity = elasticityfunc("Northeast")
+Plains_elasticity = elasticityfunc("Plains")
+South_Central_elasticity = elasticityfunc("South Central")
+Southeast_elasticity = elasticityfunc("Southeast")
+West_elasticity = elasticityfunc("West")
+
+#-------------------------------------Create data frame of Regional Elasticities
+
+#Use rbind to set the regions as the rows  
+AvocadosElasticity = data.frame(rbind("California" = California_elasticity, 
+                           "Great Lakes" = Great_Lakes_elasticity,
+                           "Midsouth" = Midsouth_elasticity, 
+                           "Northeast" = Northeast_elasticity,
+                           "Plains" = Plains_elasticity, 
+                           "South Central" = South_Central_elasticity,
+                           "Southeast" = Southeast_elasticity,
+                           "West" = West_elasticity))
+colnames(AvocadosElasticity) = seq(2,11)
+head(AvocadosElasticity)
+
+--------------------------------------#Make Avocados Elasticity Machine-Readable 
+Regions
+
+#Create a vector where regions set is repeated 10 times
+repregions10times = rep(Regions,10)
+repregions10times
+
+#Create a vector of all elasticities   
+elasticitieslist = c()
+for (w in seq(1,10)){
+  elasticity = AvocadosElasticity[,w]
+  elasticitieslist = c(elasticitieslist,elasticity)
+}
+elasticitieslist
+
+#Create a vector where each period number is repeated 8 times
+periodreplist = c()
+for (z in seq(2,11)) {
+  periodreplist = c(periodreplist,rep(z,8)) 
+}
+
+#Merge the above 3 vectors into a machine-readable data frame
+AvocadosElasticityMachineReadable = data.frame("Period" = periodreplist, "Region" = repregions10times,
+                                 "Elasticity" = elasticitieslist)
+head(AvocadosElasticityMachineReadable)
+
+
+
+#---------------------------------------------------------------Final Data Frame
+
+Elasticityfinalist = c(rep("NA",8),AvocadosElasticityMachineReadable$Elasticity)
+Elasticityfinalist
+
+Avocados2021MarketDemand = data.frame(AvocadosSeasons[,c(1:3,5,7,9:10)],"Elasticity" = Elasticityfinalist)
+head(Avocados2021MarketDemand)
+colnames(Avocados2021MarketDemand) = c("Region", "Period (4-week)", "Period End Date/Time", 
+                                       "Units Sold","Revenue","Average Sales Price",
+                                       "Season","Price Elasticity")
+
+
+head(Avocados2021MarketDemand) 
+
+#--------------------------------------------------------Export Final Data Frame 
+
+write.csv(Avocados2021MarketDemand,
+          "C:\\Users\\zara\\Documents\\Data Science Portfolio_Zara Clacken\\Project Data Frames Reconstructed by Me\\2021 U.S. Avocado Market Demand & Elasticity.csv", 
+          row.names = FALSE)
+
+
+
+
+
+
+
+
+
+
+
+
+
