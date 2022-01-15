@@ -303,6 +303,20 @@ plot(x = Predicted_Values_by_Actual_Goals/1e+06, y = Actual_Values_Goal_Order/1e
      main = "Predicted v Actual" , 
      ylim = c(0,100), xlim = c(0,70), col = "Red", pch = 19, cex = 1.1, lwd = 2)
 lines(x = 0:70, y = 0:70, col = "Blue",lwd = 3)
+text(x= 70, y = 75, "y=x", col="Blue", font= 4, cex=0.8)
 
 
 #-----------------------------------------------------------------Residuals Plot  
+
+#Actual Y - Predicted Y 
+
+ValuesResidual = as.vector(Actual_Values_Goal_Order - Predicted_Values_by_Actual_Goals)
+ValuesResidual
+max(ValuesResidual/1e+06)
+min(ValuesResidual/1e+06)
+
+plot(x = Goalslist, y = ValuesResidual/1e+06,
+     xlab = "Goals Scored", ylab = "Residuals",
+     main = "Contract Values Residual Plot" , 
+     ylim = c(-75,75), xlim = c(0,35), col = "Red", pch = 19, cex = 1.1, lwd = 2)
+lines(x = 0:35, y = rep(0,36), col = "Blue",lwd = 3, lty =3)
