@@ -1,0 +1,44 @@
+#------------------------------------------------------Predicted vs. Actual Plot
+
+#Create a goals vector based on actual goals for predicted value calculations
+ForwardProfiles$Goals..Prior.to.Contract.
+Goalslist = sort(ForwardProfiles$Goals..Prior.to.Contract.)
+
+#Predicted values based on actual goals 
+Predicted_Values_by_Actual_Goals = as.vector(11021388 + (1590007*Goalslist))
+Predicted_Values_by_Actual_Goals
+
+#Actual contract values column ordered by goals scored column
+Actual_Values_Goal_Order = as.vector(ForwardProfiles[order(ForwardProfiles$Goals..Prior.to.Contract.),"Contract.Value(£)"]) 
+Actual_Values_Goal_Order
+
+PredictedvActualRegression = lm(Actual_Values_Goal_Order ~ Predicted_Values_by_Actual_Goals)
+summary(PredictedvActualRegression)
+
+
+plot(x = Predicted_Values_by_Actual_Goals/1e+06, y = Actual_Values_Goal_Order/1e+06,
+     xlab = "Predicted Contract Values", ylab = "Actual Contract Values",
+     main = "Predicted v Actual" , 
+     ylim = c(0,100), xlim = c(0,70), col = "Red", pch = 19, cex = 1.1, lwd = 2)
+lines(x = 0:70, y = 0:70, col = "Blue",lwd = 3)
+text(x= 70, y = 75, "y=x", col="Blue", font= 4, cex=0.8)
+
+
+#-----------------------------------------------------------------Residuals Plot  
+
+#Actual Y - Predicted Y 
+
+ValuesResidual = as.vector(Actual_Values_Goal_Order - Predicted_Values_by_Actual_Goals)
+ValuesResidual
+max(ValuesResidual/1e+06)
+min(ValuesResidual/1e+06)
+
+plot(x = Goalslist, y = ValuesResidual/1e+06,
+     xlab = "Goals Scored", ylab = "Residuals",
+     main = "Contract Value Residuals Plot" , 
+     ylim = c(-75,75), xlim = c(0,35), col = "Red", pch = 19, cex = 1.1, lwd = 2)
+lines(x = 0:35, y = rep(0,36), col = "Blue",lwd = 3, lty =3)
+
+
+
+
