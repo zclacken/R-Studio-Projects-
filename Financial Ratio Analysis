@@ -1,0 +1,134 @@
+#-------------------------------------------------Current Year Income Sheet Data
+Total_operating_revenues = 2895
+Cost_of_goods_sold = 1530
+Other_operating_expenses = 558
+Depreciation = 200
+Earnings_before_interest_and_taxes_EBIT = 607
+Interest_expense = 87
+Pretax_income = 20
+Taxes = 114
+Net_income = 406  
+
+#--------------------------------------------------------------------Market Data
+Shares_Outstanding_Previous_Year = 200
+Shares_Outstanding_Current_Year = 200
+Market_Price_Per_Share_Previous_Year = 29
+Market_Price_Per_Share_Current_Year = 32.5  
+
+#-------------------------------------------------------------Balance Sheet Data
+#Assets Data
+Assetrows = c("Cash and equivalents", "Accounts receivable",
+                     "Inventory", "Total current assets", "Net fixed assets",
+                     "Total Assets")
+PreviousYearAssetData = c(135,390,220,745,814,1559)
+CurrentYearAssetData = c(120,480,290,890,973,1863)
+
+#Liability Data 
+Liabilityrows = c("Accounts Payable","Notes Payable", "Accrued Liabilities", 
+                  "Total Current Liabilities", "Long-term Debt")
+PreviousYearLiabilityData = c(150,27,30,207,560)
+CurrentYearLiabilityData = c(115,25,35,175,652) 
+
+#Equity Data 
+Equityrows = c("Common Stock", "Retained Earnings", "Total Equity", 
+               "Total Liabilities and Stockholder Equity")
+PreviousYearEquityData = c(280,512,792,1559)
+CurrentYearEquityData = c(280,756,1036,1863)
+
+#-----------------------------------------------------Create Balance Sheet Table
+
+Balancerows = c(Assetrows,Liabilityrows,Equityrows)
+Balancerows
+
+BalancePrevious = c(PreviousYearAssetData,PreviousYearLiabilityData,PreviousYearEquityData)
+BalancePrevious
+
+BalanceCurrent = c(CurrentYearAssetData,CurrentYearLiabilityData,CurrentYearEquityData)
+BalanceCurrent
+
+BalanceSheet = cbind(Balancerows,BalancePrevious,BalanceCurrent)
+BalanceSheet = as.data.frame(BalanceSheet)
+head(BalanceSheet)
+colnames(BalanceSheet) = c(" ", "Previous Year", "Current Year")
+head(BalanceSheet)
+
+str(BalanceSheet)
+BalanceSheet$`Previous Year` = as.numeric(BalanceSheet$`Previous Year`)
+BalanceSheet$`Current Year` = as.numeric(BalanceSheet$`Current Year`)
+str(BalanceSheet)
+
+row.names(BalanceSheet) = BalanceSheet[,1]
+head(BalanceSheet)
+
+BalanceSheet[,1] = NULL
+head(BalanceSheet)
+
+#----------------------------------------------------------------Ratio Variables 
+row.names(BalanceSheet)
+
+Current_Assets = BalanceSheet["Total current assets", "Current Year"]
+Current_Liabilities = BalanceSheet["Total Current Liabilities","Current Year"]
+Inventory = BalanceSheet["Inventory","Current Year"]
+Cash = BalanceSheet["Cash and equivalents","Current Year"]
+EBIT = Earnings_before_interest_and_taxes_EBIT
+Total_Assets = BalanceSheet["Total Assets","Current Year"]
+Total_Equity = BalanceSheet["Total Equity","Current Year"]
+Total_Debt = Total_Assets - Total_Equity
+Market_Capitalization = Shares_Outstanding_Current_Year*Market_Price_Per_Share_Current_Year
+Earnings_Per_Share = Net_income/Shares_Outstanding_Current_Year
+Book_Value_Per_Share = Total_Equity/Shares_Outstanding_Current_Year
+COGS = Cost_of_goods_sold
+Gross_Profit = Total_operating_revenues - COGS 
+Sales = Total_operating_revenues
+
+#---------------------------------------------------------------Liquidity Ratios
+
+Current_Ratio = Current_Assets/Current_Liabilities
+Quick_Ratio = (Current_Assets- Inventory)/Current_Liabilities
+Cash_Ratio = Cash/Current_Liabilities
+
+#--------------------------------------------------------Interest Coverage Ratio
+
+Interest_Coverage_Ratio = EBIT/Interest_expense
+
+#----------------------------------------------------------------Leverage Ratios
+
+Debt_Ratio = Total_Debt/Total_Assets
+Debt_Equity_Ratio = Total_Debt/Total_Equity
+Equity_Multiplier = Total_Assets/Total_Equity
+
+#---------------------------------------------------------Asset Management Ratio
+
+Total_Asset_Turnover = Sales/Total_Assets
+
+#------------------------------------------------------------------Profit Ratios
+
+Profit_Margin = Net_income/Sales
+Gross_Profit_Margin = Gross_Profit/Sales 
+Operating_Profit_Margin = EBIT/Sales
+Return_on_Assets = Net_income/Total_Assets
+Return_on_Equity = Net_income/Total_Equity
+
+#------------------------------------------------------------Market Value Ratios 
+
+PE_Ratio = Market_Price_Per_Share_Current_Year/Earnings_Per_Share
+Market_Book_Ratio = Market_Price_Per_Share_Current_Year/Book_Value_Per_Share
+
+#---------------------------------------------------------Create Table of Ratios 
+
+Financial_Ratios = rbind(Current_Ratio,Quick_Ratio,Cash_Ratio," ",
+                         Interest_Coverage_Ratio," ", 
+                         Debt_Ratio,Debt_Equity_Ratio,Equity_Multiplier," ", Total_Asset_Turnover,
+                         " ",
+                         Profit_Margin,Gross_Profit_Margin,Operating_Profit_Margin,
+                         Return_on_Assets,Return_on_Equity," ",
+                         PE_Ratio,Market_Book_Ratio)
+Financial_Ratios= as.data.frame(Financial_Ratios)
+head(Financial_Ratios)
+colnames(Financial_Ratios) = "Value"
+head(Financial_Ratios)
+
+
+
+
+
