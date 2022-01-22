@@ -1,0 +1,31 @@
+#-----------------------------------------------------Create Calculator Function
+FinancialRatioCalculator = function(Current_Assets,Current_Liabilities,
+                                    Inventory,EBIT,Interest_expense,Total_Assets,
+                                    Total_Debt,Total_Equity,
+                                    Sales,Net_income,Gross_Profit,Market_Price_Per_Share_Current_Year,
+                                    Shares_Outstanding_Current_Year,
+                                    Earnings_Per_Share,Book_Value_Per_Share){
+  Current_Ratio = Current_Assets/Current_Liabilities
+  Quick_Ratio = (Current_Assets- Inventory)/Current_Liabilities
+  Cash_Ratio = Cash/Current_Liabilities
+  Interest_Coverage_Ratio = EBIT/Interest_expense
+  Debt_Ratio = Total_Debt/Total_Assets
+  Debt_Equity_Ratio = Total_Debt/Total_Equity
+  Equity_Multiplier = Total_Assets/Total_Equity
+  Total_Asset_Turnover = Sales/Total_Assets
+  Profit_Margin = Net_income/Sales
+  Gross_Profit_Margin = Gross_Profit/Sales 
+  Operating_Profit_Margin = EBIT/Sales
+  Return_on_Assets = Net_income/Total_Assets
+  Return_on_Equity = Net_income/Total_Equity
+  PE_Ratio = Market_Price_Per_Share_Current_Year/Earnings_Per_Share
+  Market_Book_Ratio = Market_Price_Per_Share_Current_Year/Book_Value_Per_Share
+  Financial_Ratios = rbind(Current_Ratio,Quick_Ratio,Cash_Ratio,
+                                         Interest_Coverage_Ratio,
+                                         Debt_Ratio,Debt_Equity_Ratio,Equity_Multiplier, 
+                                         Total_Asset_Turnover,
+                                         Profit_Margin,Gross_Profit_Margin,Operating_Profit_Margin,
+                                         Return_on_Assets,Return_on_Equity,
+                                         PE_Ratio,Market_Book_Ratio)
+  print(Financial_Ratios)}
+
