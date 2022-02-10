@@ -1,40 +1,36 @@
 # Load R packages
 library(shiny)
 library(shinythemes)
-
+library(scales)
+library(formattable)
 
 # Define UI
 ui = fluidPage(theme = shinytheme("cosmo"),
                navbarPage(
-                 theme = "cerulean",  
+                 theme = "cosmo",  
                  "Future Savings Calculator by Zara Clacken",
                  tabPanel(" ",
                           sidebarPanel(
                             tags$h3("Input:"),
-                            numericInput("PV", "Current Account Balance:", ""),
+                            numericInput("PV", "Current Balance:", ""),
                             numericInput("R", "APY (%):", ""),
                             numericInput("N", "Investment Period (Years):", ""),
                           ), # sidebarPanel
                           mainPanel(
-                            h1("Future Account Balance"),
-                            
-                            h4(" "),
+                            h1("Future Balance"),
+                            h4("Monthly Compounding "),
                             verbatimTextOutput("txtout"),
                           ) # mainPanel
                  ), # Navbar 1, tabPanel
                ) # navbarPage
 ) # fluidPage
 
-
 # Define server function  
 server <- function(input, output) {
   output$txtout <- renderText({
-    paste(round(input$PV* (1 + (input$R/100/12)) ^ (input$N*12),2))
+    paste(comma(input$PV *(1 + (input$R/100/12)) ^ (input$N*12),digits = 2,decimal.mark = "."))
   })
 } 
 
 # Create Shiny object
 shinyApp(ui = ui, server = server)
-
-
-
