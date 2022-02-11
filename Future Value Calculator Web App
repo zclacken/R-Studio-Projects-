@@ -1,7 +1,8 @@
+setwd("~/Data Science Portfolio_Zara Clacken/Future Value Calculator App")
+
 # Load R packages
 library(shiny)
 library(shinythemes)
-library(scales)
 library(formattable)
 
 # Define UI
@@ -18,6 +19,7 @@ ui = fluidPage(theme = shinytheme("cosmo"),
                           ), # sidebarPanel
                           mainPanel(
                             h1("Future Balance"),
+                            
                             h4("Monthly Compounding "),
                             verbatimTextOutput("txtout"),
                           ) # mainPanel
@@ -28,7 +30,7 @@ ui = fluidPage(theme = shinytheme("cosmo"),
 # Define server function  
 server <- function(input, output) {
   output$txtout <- renderText({
-    paste(comma(input$PV *(1 + (input$R/100/12)) ^ (input$N*12),digits = 2,decimal.mark = "."))
+    paste(currency(comma(input$PV *(1 + (input$R/100/12)) ^ (input$N*12),digits = 2,decimal.mark = ".")))
   })
 } 
 
