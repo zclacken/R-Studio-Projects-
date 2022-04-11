@@ -1,0 +1,22 @@
+#Import Data- type the name of the file in "filename.csv" format 
+raw_file_name = "Practice Raw Data for Transition Cleaning in R.csv"
+
+#Cleaned File Name- Desired Name for the Cleaned File After Exporting in "filename.csv" format 
+Export_Name = "MODA Alaska R.csv"
+
+##----------------------------------------------------------------------------##
+#Script for Cleaning 
+Raw_Data = read.csv(raw_file_name)
+required_columns = c('ClaimDetail',	
+                     'MemberID',	
+                     'HCPCS',	
+                     'New.Modifier1',	
+                     'New.Modifier2',	
+                     'DateOfService',	
+                     'Allowed',	
+                     'ServicingProviderName',	
+                     'ServicingProviderNPI')
+Cleaned_Data = Raw_Data[,required_columns]
+#Export Data Frame
+write.csv(Cleaned_Data,file = Export_Name, row.names = FALSE)
+##----------------------------------------------------------------------------##
