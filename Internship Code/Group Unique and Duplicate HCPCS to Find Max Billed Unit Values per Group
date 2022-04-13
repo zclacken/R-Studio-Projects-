@@ -25,6 +25,6 @@ for (g in 1:227) {
 }
 
 #Create Data Frame with only the max values matched to their respective group 
-for (u in seq(1,227)) {
+# Need to figure out how to put subsetted rows together into a data frame. Maybe using the below? 
   dfupdated = df[df$Grp == Groupnames[u] & df$`Total Billed Units` == maxvalues[u],]
-}
+
