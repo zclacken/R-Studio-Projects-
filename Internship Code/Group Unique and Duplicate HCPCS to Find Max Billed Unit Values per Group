@@ -9,14 +9,17 @@ df = Duplicate_Column_Data_Practice_Using_AllCare_
 #Group HCPCS column values 
 library(data.table)
 df$Grp<-paste0("Grp",rleid(df$HCPCS)) 
+
 #Check Groupings
 df[,c("HCPCS","Grp")]
-
-#Code to extract max value of each group 
-max(df[df$Grp == "Grp2","Total Billed Units"])
 
 #Group Name Vector 
 Groupnames = unique(df$Grp)
 Groupnames
 
-#
+#Loop to print max values per group
+maxvalues = c()
+for (g in 1:227) {
+  x = max(df[df$Grp == Groupnames[g],"Total Billed Units"])
+  maxvalues = append(maxvalues,x)
+}
