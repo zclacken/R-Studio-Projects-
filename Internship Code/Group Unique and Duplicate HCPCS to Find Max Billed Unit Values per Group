@@ -17,7 +17,7 @@ df[,c("HCPCS","Grp")]
 Groupnames = unique(df$Grp)
 Groupnames
 
-#Loop to print max values per group
+#Use a Loop to Create a Vector of Max Values Per Group
 maxvalues = c()
 for (g in 1:227) {
   x = as.vector(max(df[df$Grp == Groupnames[g],"Total Billed Units"])) 
@@ -25,4 +25,6 @@ for (g in 1:227) {
 }
 
 #Create Data Frame with only the max values matched to their respective group 
-df[df$Grp == Groupnames[2] & df$`Total Billed Units` == maxvalues[2],]
+for (u in seq(1,227)) {
+  dfupdated = df[df$Grp == Groupnames[u] & df$`Total Billed Units` == maxvalues[u],]
+}
