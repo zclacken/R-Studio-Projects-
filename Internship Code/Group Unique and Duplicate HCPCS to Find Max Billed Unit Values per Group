@@ -23,5 +23,4 @@ for (g in 1:227) {
   x = max(df[df$Grp == Groupnames[g],"Total Billed Units"])
   maxvalues = append(maxvalues,x)
 }
-
-dfupdated = df[df$`Total Billed Units`== maxvalues[1:227],]
+df[df$`Total Billed Units`== maxvalues[3],]
