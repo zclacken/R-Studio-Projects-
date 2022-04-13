@@ -20,9 +20,9 @@ Groupnames
 #Loop to print max values per group
 maxvalues = c()
 for (g in 1:227) {
-  x = max(df[df$Grp == Groupnames[g],"Total Billed Units"])
+  x = as.vector(max(df[df$Grp == Groupnames[g],"Total Billed Units"])) 
   maxvalues = append(maxvalues,x)
 }
 
-
-df[df$Grp == Groupnames[10] & df$`Total Billed Units` == maxvalues[10],]
+#Create Data Frame with only the max values matched to their respective group 
+df[df$Grp == Groupnames[2] & df$`Total Billed Units` == maxvalues[2],]
