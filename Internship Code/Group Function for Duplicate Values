@@ -1,0 +1,22 @@
+##Some HCPCS id numbers appear multiple times in the HCPCS column
+##The Group function will group repeated values and give each unique value its own group
+##Once Grouped, find the max value of the Total Billed Units for each group
+##Make the spreadsheet show only HCPCS with max values, eliminating the duplicates that are not max value
+
+#Import Data
+df = Duplicate_Column_Data_Practice_Using_AllCare_
+
+#Group HCPCS column values 
+library(data.table)
+df$Grp<-paste0("Grp",rleid(df$HCPCS)) 
+#Check Groupings
+df[,c("HCPCS","Grp")]
+
+#Code to extract max value of each group 
+max(df[df$Grp == "Grp2","Total Billed Units"])
+
+#Group Name Vector 
+Groupnames = unique(df$Grp)
+Groupnames
+
+#
