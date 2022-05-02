@@ -200,6 +200,69 @@ n + geom_histogram(binwidth = 10, aes(fill = Genre),color = "Black") +
 v + geom_point(size = 1) + geom_smooth() + 
   facet_grid(Genre~Year) + coord_cartesian(ylim = c(0,100))
 
+#---------------------------------------------------------------Themes
+
+o = ggplot(data = movies, aes(x = BudgetMillions))
+h = o + geom_histogram(binwidth = 10,aes(fill = Genre),color = "Black")
+
+#Axes Labels
+h
+h + xlab("Money Axis")+ ylab("Number of Movies")
+
+#label formatting
+h + xlab("Money Axis")+ ylab("Number of Movies")+
+  theme(axis.title.x = element_text(color = "DarkGreen", size = 30),
+        axis.title.y = element_text(color = "Red", size = 30))
+
+#tick mark formatting
+h + 
+  xlab("Money Axis")+ 
+  ylab("Number of Movies")+
+  theme(axis.title.x = element_text(color = "DarkGreen", size = 15),
+        axis.title.y = element_text(color = "Red", size = 15),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size=10))
+
+
+#Legend Formatting
+h + 
+  xlab("Money Axis")+ 
+  ylab("Number of Movies")+
+  theme(axis.title.x = element_text(color = "DarkGreen", size = 15),
+        axis.title.y = element_text(color = "Red", size = 15),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size=10),
+        legend.title = element_text(size=15),
+        legend.text = element_text(size=10),
+        legend.position = c(1,1),
+        legend.justification = c(1,1))
+
+#Plot Title
+h + 
+  xlab("Money Axis")+ 
+  ylab("Number of Movies")+
+  ggtitle("Movie Budget Distribution")+  #add a title to the plot 
+  theme(axis.title.x = element_text(color = "DarkGreen", size = 15),
+        axis.title.y = element_text(color = "Red", size = 15),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size=10),
+        #legend theme
+        legend.title = element_text(size=15),
+        legend.text = element_text(size=10),
+        legend.position = c(1,1),
+        legend.justification = c(1,1),
+        #title theme
+        plot.title = element_text(color = "DarkBlue",size=15, 
+                                  family = "Courier", hjust = 0.5),
+        )
+
+
+
+
+
+
+
+
 
 
 
