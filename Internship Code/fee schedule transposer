@@ -3,37 +3,22 @@ ncol(fee_schedule)
 HCPCS = rep(fee_schedule$Hcpcs,92)
 MOD1 = rep(fee_schedule$Mod1,92)
 MOD2 = rep(fee_schedule$Mod2,92)
-PlanName = c(rep("Aetna Better Health NY - MLTC/LTSS",26),rep("Aetna NJ - Medicare",26),rep("Aetna NY - Commercial",26),
-  rep("Aetna NY - Medicare",26),rep("Affinity NY - Medicaid",26),rep("AgeWell NY - Medicare",26),
-  rep("AmidaCare NY - Medicaid",26),rep("Anthem BCBS CT - Commercial",26),rep("ArchCare NY - MLTC/LTSS",26),
-  rep("BCBS Bluecard - (Non NY Plans)",26),rep("Bright Health FL - Commercial",26),rep("Bright Health NC - Commercial",26),
-  rep("Bright Health TN - Commercial",26),rep("Clover Health AZ - Medicare",26),rep("Clover Health GA - Medicare",26),
-  rep("Clover Health NJ - Medicare",26),rep("Clover Health PA - Medicare",26),rep("Clover Health SC - Medicare",26),
-  rep("Empire BCBS Healthplus NY - Exchange",26),rep("Empire BCBS Healthplus NY - MLTC/LTSS",26),rep("Empire BCBS NY - Commercial",26),
-  rep("Empire BCBS NY - Medicare",26),rep("Fidelis Care NY - Exchange",26),rep("Fidelis Care NY - HARP",26),
-  rep("Fidelis Care NY - Health Benefit Exchange",26),rep("Fidelis Care NY - Medicaid",26),rep("Fidelis Care NY - Medicare",26),
-  rep("Fidelis Care NY - MLTC/LTSS",26),rep("GHI NY - Commercial",26),rep("Hamaspik NY - MLTC/LTSS",26),
-  rep("Harmony Health Plan - Wellcare IL (Medicare)",26),rep("Health Care Partners NY - Commercial",26),rep("Health Care Partners NY - Medicaid",26),
-  rep("Health Care Partners NY - Medicare",26),rep("Health Partners Plan PA - Medicaid",26),rep("Health Partners Plan PA - Medicare",26),
-  rep("Health Partners Plan, Inc. – CHIP",26),rep("Healthfirst NY - CHIP",26),rep("Healthfirst NY - Commercial",26),
-  rep("Healthfirst NY - Duals",26),rep("Healthfirst NY - Exchange",26),rep("Healthfirst NY - Leaf Plan and Small Group",26),
-  rep("Healthfirst NY - Medicaid",26),rep("Healthfirst NY - Medicare",26),rep("Healthfirst NY - MLTC/LTSS",26),
-  rep("Highmark WNY NY - Commercial",26),rep("Highmark WNY NY - Medicaid",26),rep("HIP NY - Commercial",26),
-  rep("HIP NY - Exchange",26),rep("HIP NY - Medicaid",26),rep("HIP NY - Medicare",26),
-  rep("Independent Health NY - Medicaid",26),rep("Magnacare - Medicaid Managed Care Programs",26),rep("MagnaCare NY - Commercial",26),
-  rep("MagnaCare NY - Medicare",26),rep("Molina Complete Care - CCC Plus VA - Duals",26),rep("Molina Complete Care - Medallion 4.0 VA - Medicaid",26),
-  rep("Montefiore CMO NY - Commercial",26),rep("Montefiore CMO NY - Medicaid",26),rep("Montefiore CMO NY - Medicare",26),
-  rep("Montefiore Diamond Care NY - MLTC/LTSS",26),rep("Neighborhood RI - Commercial",26),rep("Neighborhood RI - Duals",26),
-  rep("Neighborhood RI - Medicaid",26),rep("Northwell Magnacare TPA CT - Commercial",26),rep("Northwell Magnacare TPA NY - Commercial",26),
-  rep("Northwell Web TPA NY - Commercial",26),rep("Oscar FL - Commercial",26),rep("Oscar NY - Medicare",26),
-  rep("Qualcare - Oscar NJ NJ - Commercial",26),rep("Senior Whole Health NY - Duals",26),rep("Senior Whole Health NY - MLTC/LTSS",26),
-  rep("Senior Whole Health of Massachusetts - HMO SNP",26),rep("SOMOS - Anthem NY - Exchange",26),rep("SOMOS - Anthem NY - Medicaid",26),
-  rep("SOMOS - Emblem NY - Exchange",26),rep("SOMOS - Emblem NY - Medicaid",26),rep("VillageCareMAX NY - Duals",26),
-  rep("VillageCareMAX NY - MLTC/LTSS",26),rep("WellCare AR - Medicare",26),rep("WellCare CA - Medicare",26),
-  rep("WellCare CT - Medicare",26),rep("WellCare HI - Medicaid",26),rep("WellCare HI - Medicare",26),
-  rep("WellCare LA - Medicare",26),rep("WellCare MS - Medicare",26),rep("WellCare NJ - Medicaid",26),
-  rep("WellCare NJ - Medicare",26),rep("WellCare NY - Medicare",26),rep("WellCare SC - Medicare",26),
-  rep("WellCare TN - Medicare",26),rep("WellCare TX - Medicare",26))
+Rate_Plan_Stacked = stack(fee_schedule, select = 7:98)
+Plan = Rate_Plan_Stacked$ind  
+Rates = Rate_Plan_Stacked$values
+transposed_df = data.frame(HCPCS,MOD1,MOD2,Plan,Rates)
+write.csv(transposed_df,"Enteral_K0553_K0554_Fee_Schedule_Transposed.csv",row.names = FALSE)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
