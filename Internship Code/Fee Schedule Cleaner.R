@@ -1,39 +1,10 @@
-fee_schedule = K0553_K0554_Enteral_Fee_Schedule
-utilized_columns = c("Hcpcs","Mod1","Mod2",
-                     "Purchase or Rental?","HCPCS Product Category Parent","Short Description", 
-                     "Aetna Better Health NY - MLTC/LTSS","Aetna NJ - Medicare","Aetna NY - Commercial",
-                    "Aetna NY - Medicare","Affinity NY - Medicaid",
-                    "AgeWell NY - Medicare","AmidaCare NY - Medicaid","Anthem BCBS CT - Commercial",
-                    "ArchCare NY - MLTC/LTSS","BCBS Bluecard - (Non NY Plans)","Bright Health FL - Commercial",
-                    "Bright Health NC - Commercial","Bright Health TN - Commercial","Clover Health AZ - Medicare",
-                    "Clover Health GA - Medicare","Clover Health NJ - Medicare","Clover Health PA - Medicare",
-                    "Clover Health SC - Medicare","Empire BCBS Healthplus NY - Exchange",
-                    "Empire BCBS Healthplus NY - MLTC/LTSS","Empire BCBS NY - Commercial","Empire BCBS NY - Medicare",
-                    "Fidelis Care NY - Exchange","Fidelis Care NY - HARP","Fidelis Care NY - Health Benefit Exchange",
-                    "Fidelis Care NY - Medicaid","Fidelis Care NY - Medicare","Fidelis Care NY - MLTC/LTSS",
-                    "GHI NY - Commercial","Hamaspik NY - MLTC/LTSS","Harmony Health Plan - Wellcare IL (Medicare)",
-                    "Health Care Partners NY - Commercial","Health Care Partners NY - Medicaid","Health Care Partners NY - Medicare",
-                    "Health Partners Plan PA - Medicaid","Health Partners Plan PA - Medicare","Health Partners Plan, Inc. – CHIP",
-                    "Healthfirst NY - CHIP","Healthfirst NY - Commercial","Healthfirst NY - Duals",
-                    "Healthfirst NY - Exchange","Healthfirst NY - Leaf Plan and Small Group","Healthfirst NY - Medicaid",
-                    "Healthfirst NY - Medicare","Healthfirst NY - MLTC/LTSS","Highmark WNY NY - Commercial",
-                    "Highmark WNY NY - Medicaid","HIP NY - Commercial","HIP NY - Exchange",
-                    "HIP NY - Medicaid","HIP NY - Medicare","Independent Health NY - Medicaid",
-                    "Magnacare - Medicaid Managed Care Programs","MagnaCare NY - Commercial","MagnaCare NY - Medicare",
-                    "Molina Complete Care - CCC Plus VA - Duals","Molina Complete Care - Medallion 4.0 VA - Medicaid","Montefiore CMO NY - Commercial",
-                    "Montefiore CMO NY - Medicaid","Montefiore CMO NY - Medicare","Montefiore Diamond Care NY - MLTC/LTSS",
-                    "Neighborhood RI - Commercial","Neighborhood RI - Duals","Neighborhood RI - Medicaid",
-                    "Northwell Magnacare TPA CT - Commercial","Northwell Magnacare TPA NY - Commercial","Northwell Web TPA NY - Commercial",
-                    "Oscar FL - Commercial","Oscar NY - Medicare","Qualcare - Oscar NJ NJ - Commercial",
-                    "Senior Whole Health NY - Duals","Senior Whole Health NY - MLTC/LTSS","Senior Whole Health of Massachusetts - HMO SNP",
-                    "SOMOS - Anthem NY - Exchange","SOMOS - Anthem NY - Medicaid","SOMOS - Emblem NY - Exchange",
-                    "SOMOS - Emblem NY - Medicaid","VillageCareMAX NY - Duals",
-                    "VillageCareMAX NY - MLTC/LTSS","WellCare AR - Medicare",
-                    "WellCare CA - Medicare","WellCare CT - Medicare","WellCare HI - Medicaid",
-                    "WellCare HI - Medicare","WellCare LA - Medicare","WellCare MS - Medicare",
-                    "WellCare NJ - Medicaid","WellCare NJ - Medicare","WellCare NY - Medicare",
-                    "WellCare SC - Medicare","WellCare TN - Medicare","WellCare TX - Medicare"
+#import raw fee schedule and define it as fee_schedule 
+fee_schedule = 
+#paste list of desired columns  
+utilized_columns = c(
 )
+#Script for cleaning  
 Cleaned_Fee_Schedule = fee_schedule[,utilized_columns]
-write.csv(Cleaned_Fee_Schedule,"Enteral_K0553_K0554_Cleaned_Fee_Schedule.csv",row.names = FALSE)
+#Export as CSV 
+write.csv(Cleaned_Fee_Schedule,".csv",row.names = FALSE)
 
