@@ -1,0 +1,85 @@
+#----------------------------------------------------------------------Objective 
+#Analyze LSUS enrollment trends relative to  tuition and median income#
+
+#-------------------------------------------------------Create vectors from data
+#Create Year Vector 
+Year = as.factor(seq(2000,2020))
+
+#Undergrad Enrollment Vector
+Enrollment = c(3422,	3419,	3543,	3655,	3910,	3940,	3594,	3556,	3903,	
+               4220,	4058,	4134,	4124,	3674,	3202,	2775,	2587,	2637,	
+               2511,	2577,	2553)
+
+#Total LSUS Credit Hour Production Vector
+Credits = c(90624,	94446,	96039,	101352,	101868,	100181,	92486,	92123,	
+            94639,	101972,	98137,	98372,	93163,	85292,	87907,	91021,	
+            94077,	115340,	137467,	165057,	191712)
+
+#Total Undergrad Tuition and Fees 
+Tuitionfees = c(1025,	1150,	1184,	1442,	1545,	1621,	1667,	1667,	1751,	1867,	
+                2062,	2247,	2472,	2803,	3084,	3355,	3417,	3417,	3663,	3663,	3663)
+
+#--------------------------------------------------Merge Vectors into Data Frame
+
+LSUSdata <- data.frame(Year,Enrollment,Credits,Tuitionfees)
+
+
+#-----------------------------------------------------Import Median Income Data
+setwd("C:\\Users\\zmcro\\Documents\\2025 R CODE PROJECTS")
+incomeraw = read.csv("LOUISIANA STATE MEDIAN INCOMES.csv")
+
+#-----------------------------------------------------------Median Income Table   
+
+#Extract year from dates in the raw data frame 
+incomeraw$observation_date = as.Date(incomeraw$observation_date)
+incomeraw$year=as.numeric(format(incomeraw$observation_date,"%Y"))
+
+#Create Cleaned Income Table  
+incometable = data.frame(incomeraw$year,incomeraw$MEHOINUSLAA646N) 
+
+colnames(incometable) = c("Year","income")
+
+#-----------------------------------------------------------Merge data frames
+
+LSUSenrollment = merge(LSUSdata,incometable, by = "Year")  
+
+#---------------------------------------------Create Year Two Digit Year Column
+e = as.character(seq(0,9)) 
+zero = as.character(0)
+f = as.character(seq (10,20))
+yy = c(paste(zero,e,sep = ""),f) #paste concatenates string characters 
+yy
+
+LSUSenrollment$yy = yy
+head(LSUSenrollment)
+#-------------------------Single Plot Multiple Series-------------------------# 
+library(ggplot2)
+library(ggbreak)#enables removing unused/empty areas of a plot on the y-axis
+
+L = ggplot(data = LSUSenrollment,aes(x=yy)) + 
+  geom_point(aes(y =Tuitionfees/1000, 
+                 size = Enrollment,
+                 color = "Tuition"),
+             shape = 18,) +
+  geom_point(aes(y =income/1000,
+                 size = Enrollment, 
+                 color = "Income"),shape = 18,) + 
+  scale_y_continuous(limits = c(.65, 51.710)) +
+  scale_y_break(breaks = c(4,30)) + 
+  ylab("Dollar Amount ($1000)") +
+  xlab("Year") +
+  labs(colour = "") +
+  ggtitle("LSUS Enrollment vs. Tuition & Median Income") + 
+  theme(plot.title = element_text(h=0.313, size = 20.5),
+        axis.title.x = element_text(hjust =0.415,size = 13),
+        axis.title.y.left = element_text(hjust = 0.56, angle = 90,size = 13),
+        legend.key.size = unit(20,"cm"), 
+        legend.key.height = unit(1,"cm"),
+        legend.key.width = unit(.5,"cm"),
+        legend.text = element_text(size = 10)
+        )  + 
+  guides(color = guide_legend(override.aes = list(size = 5)))   
+L                                               
+ 
+
+
